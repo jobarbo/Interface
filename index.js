@@ -5,11 +5,11 @@ let MCdata; // Object to store motion capture data
 let bones = []; // Bones are connections between joints
 let frame = 0; // Keeps the currently displayed frame
 let framesMax; // Maximum number of frames, to loop the animation
-let scaleMotionData = 1.75; // Scale the figure on screen by a factor, "zoom"
+let scaleMotionData = 2.25; // Scale the figure on screen by a factor, "zoom"
 
 function preload() {
 	// Import motion capture data
-	MCdata = loadJSON('Moonlight_frontal_by_Juliano_Nunes.json');
+	MCdata = loadJSON('DerLiebhaber_frontal_by_Marco_Goecke.json');
 	console.log(MCdata);
 }
 
@@ -34,7 +34,7 @@ function draw() {
 	// Draw bones
 	noFill();
 	strokeWeight(1);
-	stroke(0, 0, 0, 20);
+	stroke(0, 0, 0, 10);
 	//drawBones(frame);
 
 	// Loop the animation
@@ -116,19 +116,20 @@ function drawJoints(frame) {
 
 			// calculate the distance between the two vectors
 			let d = p5.Vector.dist(j, pj);
-			let sw = 1;
+			let sw = 0.1;
 			let swIteration = map(d, 0, 100, -0.1, 0.1);
 			console.log(d);
 
 			if (j) {
 				sw += swIteration;
 				//circle(j.x, j.y, 50);
-				stroke(75, 100, 100, 10);
+
 				strokeWeight(sw);
 
-				for (let i = 0; i < 10; i++) {
-					let x = random(-10, 10);
-					let y = random(-10, 10);
+				for (let i = 0; i < 100; i++) {
+					let x = random(-40, 40);
+					let y = random(-40, 40);
+					stroke(75, 100, 10, 10);
 					line(j.x + x, j.y + y, pj.x + x, pj.y + y);
 				}
 			}
