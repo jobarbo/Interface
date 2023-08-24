@@ -5,7 +5,7 @@ let MCdata; // Object to store motion capture data
 let bones = []; // Bones are connections between joints
 let frame = 0; // Keeps the currently displayed frame
 let framesMax; // Maximum number of frames, to loop the animation
-let scaleMotionData = 3.75; // Scale the figure on screen by a factor, "zoom"
+let scaleMotionData = 1.75; // Scale the figure on screen by a factor, "zoom"
 
 function preload() {
 	// Import motion capture data
@@ -28,14 +28,14 @@ function draw() {
 	//background(235, 224, 203, 10);
 	// Draw joints
 	noStroke();
-	fill(200, 0, 0, 10);
+	fill(200, 0, 100, 10);
 	drawJoints(frame);
 
 	// Draw bones
 	noFill();
 	strokeWeight(1);
-	stroke(0, 100, 10, 10);
-	drawBones(frame);
+	stroke(0, 0, 0, 20);
+	//drawBones(frame);
 
 	// Loop the animation
 	frame++;
@@ -93,16 +93,46 @@ function defineBones() {
 function drawJoints(frame) {
 	let joints = MCdata[frame];
 	let j;
+	let previousJoints = MCdata[frame];
+	let pj;
+	console.log(joints.length);
+	console.log(previousJoints.length);
+	if (frame > 0) {
+		previousJoints = MCdata[frame - 1];
+	}
 	for (let i = 0; i < joints.length; i++) {
 		let {x, y, type, name} = joints[i];
+
 		// In this example we use only body joints, not detailed hands joints
 		if (type === 'body') {
-			if (name === 'LEFT_THUMB' || name === 'RIGHT_THUMB') {
-				j = remapPos(x, y);
-				if (j) {
-					circle(j.x, j.y, 50);
+			//if (name === 'LEFT_THUMB' || name === 'RIGHT_THUMB') {
+			let {x: px, y: py} = previousJoints[i];
+			j = remapPos(x, y);
+			pj = remapPos(px, py);
+
+			// convert j and pj to vectors
+			j = createVector(j.x, j.y);
+			pj = createVector(pj.x, pj.y);
+
+			// calculate the distance between the two vectors
+			let d = p5.Vector.dist(j, pj);
+			let sw = 1;
+			let swIteration = map(d, 0, 100, -0.1, 0.1);
+			console.log(d);
+
+			if (j) {
+				sw += swIteration;
+				//circle(j.x, j.y, 50);
+				stroke(75, 100, 100, 10);
+				strokeWeight(sw);
+
+				for (let i = 0; i < 10; i++) {
+					let x = random(-10, 10);
+					let y = random(-10, 10);
+					line(j.x + x, j.y + y, pj.x + x, pj.y + y);
 				}
 			}
+			//}
 		}
 	}
 }
