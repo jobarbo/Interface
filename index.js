@@ -9,7 +9,7 @@ let lastFrame = frame;
 let framesMax; // Maximum number of frames, to loop the animation
 let scaleMotionData = 1; // Scale the figure on screen by a factor, "zoom"
 
-let num = 100;
+let num = 1000;
 let w = 1;
 let a = 100;
 let h = 0;
@@ -33,12 +33,12 @@ let maxFrames = 60;
 let C_WIDTH;
 let MULTIPLIER;
 
-let allParticlesDrawn = false;
+let init_done = false;
 
 function preload() {
 	// Import motion capture data
 	//MCdata = loadJSON('Moonlight_frontal_by_Juliano_Nunes.json');
-	MCdata = loadJSON('Edge_Me_Away_by_Emrecan_Tanis.json');
+	MCdata = loadJSON('Moonlight_frontal_by_Juliano_Nunes.json');
 	console.log(MCdata);
 }
 
@@ -56,10 +56,11 @@ function setup() {
 
 	background(50, 5, 100);
 	defineBones();
+	INIT();
 }
 
 function draw() {
-	console.log(frame);
+	//console.log(frame);
 	//background(50, 5, 100);
 
 	// Draw joints
@@ -78,32 +79,19 @@ function draw() {
 	// if frame value changes, destroy all particles and create new ones
 	if (frame != lastFrame) {
 		let joints_pos = get_all_joint_pos(frame);
+		// destroy all particles
+		particles = [];
 
 		for (let i = 0; i < joints_pos.length; i++) {
 			let {x, y} = joints_pos[i];
-			x = x + random(-1, 1);
-			y = y + random(-1, 1);
-
-			let hue = h;
-			for (let i = 0; i < num; i++) {
-				scl1 = random([0.00095, 0.001, 0.0011, 0.0012]);
-				scl2 = scl1;
-
-				ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
-				ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
-
-				xRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12]);
-				yRandDivider = xRandDivider;
-				xMin = -0.01;
-				xMax = 1.01;
-				yMin = -0.01;
-				yMax = 1.01;
-				let initHue = hue + random(-1, 1);
-				initHue = initHue > 360 ? initHue - 360 : initHue < 0 ? initHue + 360 : initHue;
+			console.log(particles.length);
+			// reset the particles position and alpha
+			for (let j = 0; j < num; j++) {
+				// create new particles
 				let p = new Particle(
 					x,
 					y,
-					initHue,
+					h,
 					scl1 / MULTIPLIER,
 					scl2 / MULTIPLIER,
 					ang1 * MULTIPLIER,
@@ -117,9 +105,21 @@ function draw() {
 					seed
 				);
 				particles.push(p);
+				if (init_done == false) {
+					init_done = true;
+				}
 			}
 		}
 		lastFrame = frame;
+	}
+
+	if (init_done == true && frame != 0) {
+		console.log(particles.length);
+		for (let i = 0; i < particles.length; i++) {
+			let p = particles[i];
+			p.update();
+			p.show();
+		}
 	}
 
 	// delete particles if they are too old or alpha is at 0
@@ -130,13 +130,51 @@ function draw() {
 		}
 	}
 
-	for (let i = 0; i < particles.length; i++) {
-		let p = particles[i];
-		p.update();
-		p.show();
-	}
-
 	if (frame >= framesMax) {
 		frame = 0;
+	}
+}
+
+function INIT() {
+	scl1 = random([0.00095, 0.001, 0.0011, 0.0012]);
+	scl2 = scl1;
+
+	ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
+	ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
+
+	xRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12]);
+	yRandDivider = xRandDivider;
+	xMin = -0.01;
+	xMax = 1.01;
+	yMin = -0.01;
+	yMax = 1.01;
+	bgCol = color(random(0, 360), random([0, 2, 5]), 93, 100);
+
+	background(bgCol);
+	let hue = h;
+	for (let i = 0; i < 100000; i++) {
+		let x = random(xMin, xMax) * width;
+		let y = random(yMin, yMax) * height;
+		let initHue = hue + random(-1, 1);
+		initHue = initHue > 360 ? initHue - 360 : initHue < 0 ? initHue + 360 : initHue;
+		let p = new Particle(
+			x,
+			y,
+			initHue,
+			scl1 / MULTIPLIER,
+			scl2 / MULTIPLIER,
+			ang1 * MULTIPLIER,
+			ang2 * MULTIPLIER,
+			xMin,
+			xMax,
+			yMin,
+			yMax,
+			xRandDivider,
+			yRandDivider,
+			seed
+		);
+		particles.push(p);
+		//p.show();
+		//p.update();
 	}
 }

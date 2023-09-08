@@ -18,8 +18,8 @@ class Particle {
 		this.ang1 = ang1;
 		this.ang2 = ang2;
 		this.seed = seed;
-		this.xRandDivider = xRandDivider;
-		this.yRandDivider = yRandDivider;
+		this.xRandDivider = 0.1;
+		this.yRandDivider = 0.1;
 		this.xRandSkipper = 0;
 		this.yRandSkipper = 0;
 		this.xRandSkipperVal = 0;
@@ -33,8 +33,8 @@ class Particle {
 		this.centerY = height / 2;
 		this.borderX = width / 3;
 		this.borderY = height / 3;
-		this.clampvaluearray = [0.15, 0.25, 0.25, 0.015];
-		this.uvalue = random([5, 7, 10, 12, 15, 20, 40]);
+		this.clampvaluearray = [0.00015, 0.015, 0.015, 0.00015];
+		this.uvalue = 0.1;
 	}
 
 	update() {
