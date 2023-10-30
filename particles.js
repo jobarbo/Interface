@@ -6,12 +6,12 @@ class Particle {
 		this.initSat = random([0, 10, 20, 20, 20, 30, 40, 40, 60, 80, 80, 90]);
 		this.initBri = random([0, 10, 20, 20, 40, 40, 60, 70, 80, 90, 100]);
 		this.initAlpha = 100;
-		this.initS = 0.65 * MULTIPLIER;
+		this.initS = size * MULTIPLIER;
 		this.hue = this.initHue;
 		this.sat = this.initSat;
 		this.bri = this.initBri;
 		this.a = this.initAlpha;
-		this.hueStep = 1;
+		this.hueStep = 2;
 		this.s = this.initS;
 		this.scl1 = scl1;
 		this.scl2 = scl2;
@@ -28,16 +28,16 @@ class Particle {
 		this.xMax = xMax;
 		this.yMin = yMin;
 		this.yMax = yMax;
-		this.oct = 4;
+		this.oct = 6;
 		this.centerX = width / 2;
 		this.centerY = height / 2;
-		this.borderX = width / 3;
-		this.borderY = height / 3;
+		this.borderX = (xMax * width) / 2.25;
+		this.borderY = (yMax * height) / 2.25;
 		this.clampvaluearray = [0.15, 0.25, 0.25, 0.015];
-		this.uvalue = random([5, 7, 10, 12, 15, 20, 40]);
+		this.uvalue = random([1, 3, 5, 7, 10, 12, 15]);
 	}
 
-	update() {
+	update(alpha) {
 		// make the particles move according to noise;
 		let p = superCurve(
 			this.x,
@@ -71,14 +71,15 @@ class Particle {
 				: this.y;
 
 		let pxy = p.x - p.y;
-		this.hue += mapValue(pxy, -this.uvalue * 2, this.uvalue * 2, -this.hueStep, this.hueStep, true);
+		this.hue += mapValue(p.x, -this.uvalue * 2, this.uvalue * 2, -this.hueStep, this.hueStep, true);
 		this.hue = this.hue > 360 ? this.hue - 360 : this.hue < 0 ? this.hue + 360 : this.hue;
 
-		this.a -= 0.5;
+		//this.a = alpha;
+		//this.a -= 1.1;
 	}
 
 	show() {
-		fill(this.hue, this.sat, this.bri, this.a);
+		fill(this.hue + h, this.sat + s, this.bri + b, this.a);
 		noStroke();
 		rect(this.x, this.y, this.s);
 	}
