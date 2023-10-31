@@ -53,6 +53,8 @@ function setup() {
 	colorMode(HSB, 360, 100, 100, 100);
 	c = createCanvas(DIM, DIM);
 
+	pixelDensity(3);
+
 	framesMax = Object.keys(MCdata).length;
 	seed = random(100000);
 
@@ -96,8 +98,8 @@ function draw() {
 					scl1 = random([0.00095, 0.001, 0.0011, 0.0012, 0.0013]);
 					scl2 = scl1;
 
-					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
-					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
+					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
+					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
 
 					xRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12]);
 					yRandDivider = xRandDivider;
