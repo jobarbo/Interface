@@ -82,10 +82,8 @@ class Particle {
 		//this.s -= 0.000001;
 		//this.s = clamp(this.s, 0, this.initS * 2);
 
-		this.sat += s;
-		this.sat = clamp(this.sat, 0, 100);
-		this.bri += b;
-		this.bri = clamp(this.bri, 0, 100);
+		this.sat = s;
+		this.bri = b;
 		//this.a = alpha;
 		//this.a -= 1.1;
 	}
