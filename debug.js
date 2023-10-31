@@ -124,12 +124,14 @@ function get_joint_pos(frame, joint_name) {
 }
 
 function remapPos(x, y) {
-	let x1 = map(x, 0, 1, -width / 2, width / 2) * scaleMotionData + width / 1.5;
-	let y1 = map(y, 0, 1, -height / 2, height / 2) * scaleMotionData + height / 1.5;
+	let x1 = map(x, 0, 1, -width / 2, width / 2) * scaleMotionData + width / 2;
+	let y1 = map(y, 0, 1, -height / 2, height / 2) * scaleMotionData + height / 2;
 	return {x: x1, y: y1};
 }
 
 function checkMIDI() {
+	//if any knob is changed, reset the particles
+
 	if (kname == '32') {
 		a = int(map(int(kval), 0, 100, 0, 100, true));
 	}
@@ -137,11 +139,10 @@ function checkMIDI() {
 		h = int(map(int(kval), 0, 100, 0, 360, true));
 	}
 	if (kname == '34') {
-		s = int(map(int(kval), 0, 100, 0, 100, true));
+		s = int(map(int(kval), 0, 100, -5, 5, true));
 	}
 	if (kname == '35') {
-		b = int(map(int(kval), 0, 100, 0, 100, true));
-		b2 = int(map(int(kval), 0, 100, 100, 100, true));
+		b = int(map(int(kval), 0, 100, -5, 5, true));
 	}
 	if (kname == '36') {
 		frame = int(map(int(kval), 0, 100, 0, framesMax / 4, true));
@@ -155,14 +156,41 @@ function checkMIDI() {
 	if (kname == '39') {
 		frame = int(map(int(kval), 0, 100, framesMax / 2, framesMax, true));
 	}
+	if (kname == '40') {
+		particles = [];
+	}
+	if (kname == '41') {
+		particles = [];
+		background(50, 5, 10);
+		scl1 = random([0.001, 0.0013, 0.0015, 0.0017, 0.002]);
+		scl2 = random([0.001, 0.0013, 0.0015, 0.0017, 0.002]);
+
+		ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
+		ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
+	}
 }
 
-const mapValue = (v, cl, cm, tl, th, c) =>
-	c ? Math.min(Math.max(((v - cl) / (cm - cl)) * (th - tl) + tl, tl), th) : ((v - cl) / (cm - cl)) * (th - tl) + tl;
-
+let mapValue = (v, s, S, a, b) => ((v = Math.min(Math.max(v, s), S)), ((v - s) * (b - a)) / (S - s) + a);
 let clamp = (x, a, b) => (x < a ? a : x > b ? b : x);
 let smoothstep = (a, b, x) => (((x -= a), (x /= b - a)) < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x));
 let mix = (a, b, p) => a + p * (b - a);
+let dot = (v1, v2) => v1.x * v2.x + v1.y * v2.y;
+
+let R = (a = 1) => Math.random() * a;
+let L = (x, y) => (x * x + y * y) ** 0.5; // Elements by Euclid 300 BC
+let k = (a, b) => (a > 0 && b > 0 ? L(a, b) : a > b ? a : b);
+
+function sdf_box([x, y], [cx, cy], [w, h]) {
+	x -= cx;
+	y -= cy;
+	return k(abs(x) - w, abs(y) - h);
+}
+
+function sdf_circle([x, y], [cx, cy], r) {
+	x -= cx;
+	y -= cy;
+	return L(x, y) - r;
+}
 
 let dpi = (maxDPI = 3.0) => {
 	let formatMode = features.format_mode;
