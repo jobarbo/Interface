@@ -11,12 +11,12 @@ let scaleMotionData = 1.5; // Scale the figure on screen by a factor, "zoom"
 
 let num = 1000;
 let w = 1;
-let a = 0;
+let a = 100;
 let h = 0;
 let s = 0;
 let b = 0;
 let o = 1;
-let size = 1;
+let size = 0.1;
 
 let particles = [];
 let scl1;
@@ -49,8 +49,9 @@ function preload() {
 function setup() {
 	DIM = min(windowWidth, windowHeight);
 	MULTIPLIER = DIM / DEFAULT_SIZE;
-	c = createCanvas(DIM, DIM * 1.446);
+	//c = createCanvas(DIM, DIM * 1.446);
 	colorMode(HSB, 360, 100, 100, 100);
+	c = createCanvas(DIM, DIM);
 
 	framesMax = Object.keys(MCdata).length;
 	seed = random(100000);

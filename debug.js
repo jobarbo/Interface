@@ -133,7 +133,7 @@ function checkMIDI() {
 	//if any knob is changed, reset the particles
 
 	if (kname == '32') {
-		a = int(map(int(kval), 0, 100, 0, 100, true));
+		size = map(int(kval), 0, 100, 0.01, 0.6, true);
 	}
 	if (kname == '33') {
 		h = int(map(int(kval), 0, 100, 0, 360, true));

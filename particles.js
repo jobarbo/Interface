@@ -79,8 +79,8 @@ class Particle {
 		this.hue += mapValue(p.x, -this.uvalue * 2, this.uvalue * 2, -this.hueStep, this.hueStep, true);
 		this.hue = this.hue > 360 ? this.hue - 360 : this.hue < 0 ? this.hue + 360 : this.hue;
 
-		this.s -= 0.000001;
-		this.s = clamp(this.s, 0, this.initS * 2);
+		//this.s -= 0.000001;
+		//this.s = clamp(this.s, 0, this.initS * 2);
 
 		this.sat += s;
 		this.sat = clamp(this.sat, 0, 100);
@@ -91,9 +91,9 @@ class Particle {
 	}
 
 	show() {
-		fill(h, this.sat, this.bri, a);
+		fill(h, this.sat, this.bri, 100);
 		noStroke();
-		rect(this.x, this.y, this.s);
+		rect(this.x, this.y, size);
 	}
 }
 
