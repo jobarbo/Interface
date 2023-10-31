@@ -7,7 +7,7 @@ let bones = []; // Bones are connections between joints
 let frame = 0; // Keeps the currently displayed frame
 let lastFrame = frame;
 let framesMax; // Maximum number of frames, to loop the animation
-let scaleMotionData = 2; // Scale the figure on screen by a factor, "zoom"
+let scaleMotionData = 0.5; // Scale the figure on screen by a factor, "zoom"
 
 let num = 1000;
 let w = 1;
@@ -59,7 +59,6 @@ function setup() {
 
 	background(50, 5, 100);
 	defineBones();
-	INIT();
 }
 
 function draw() {
@@ -174,48 +173,4 @@ function drawUI() {
 	drawingContext.lineTo(centerX - borderX, centerY - borderY);
 	// Stroke the lines
 	drawingContext.stroke();
-}
-
-function INIT() {
-	scl1 = random([0.00095, 0.001, 0.0011, 0.0012]);
-	scl2 = scl1;
-
-	ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
-	ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
-
-	xRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12]);
-	yRandDivider = xRandDivider;
-	xMin = -0.01;
-	xMax = 1.01;
-	yMin = -0.01;
-	yMax = 1.01;
-	bgCol = color(random(0, 360), random([0, 2, 5]), 93, 100);
-
-	background(bgCol);
-	let hue = h;
-	for (let i = 0; i < 100000; i++) {
-		let x = random(xMin, xMax) * width;
-		let y = random(yMin, yMax) * height;
-		let initHue = hue + random(-1, 1);
-		initHue = initHue > 360 ? initHue - 360 : initHue < 0 ? initHue + 360 : initHue;
-		let p = new Particle(
-			x,
-			y,
-			initHue,
-			scl1 / MULTIPLIER,
-			scl2 / MULTIPLIER,
-			ang1 * MULTIPLIER,
-			ang2 * MULTIPLIER,
-			xMin,
-			xMax,
-			yMin,
-			yMax,
-			xRandDivider,
-			yRandDivider,
-			seed
-		);
-		particles.push(p);
-		//p.show();
-		//p.update();
-	}
 }
