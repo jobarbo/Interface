@@ -7,17 +7,16 @@ let bones = []; // Bones are connections between joints
 let frame = 0; // Keeps the currently displayed frame
 let lastFrame = frame;
 let framesMax; // Maximum number of frames, to loop the animation
-let scaleMotionData = 1.5; // Scale the figure on screen by a factor, "zoom"
+let scaleMotionData = 2; // Scale the figure on screen by a factor, "zoom"
 
 let num = 1000;
 let w = 1;
-let a = 100;
+let a = 0;
 let h = 0;
 let s = 0;
 let b = 0;
-let b2 = 100;
 let o = 1;
-let size = 0.1;
+let size = 1;
 
 let particles = [];
 let scl1;
@@ -50,7 +49,7 @@ function preload() {
 function setup() {
 	DIM = min(windowWidth, windowHeight);
 	MULTIPLIER = DIM / DEFAULT_SIZE;
-	c = createCanvas(DIM, DIM * 1.375);
+	c = createCanvas(DIM, DIM * 1.446);
 	colorMode(HSB, 360, 100, 100, 100);
 
 	framesMax = Object.keys(MCdata).length;
@@ -63,7 +62,7 @@ function setup() {
 }
 
 function draw() {
-	//background(50, 5, 100);
+	//background(50, 5, 10);
 
 	// Draw joints
 	/* 	noStroke();
@@ -81,15 +80,18 @@ function draw() {
 	// if frame value changes, destroy all particles and create new ones
 	if (frame != lastFrame) {
 		let joints_pos = get_all_joint_pos(frame);
-		if (particles.length < 10000) {
+		if (particles.length < 5000) {
 			for (let i = 0; i < joints_pos.length; i++) {
 				let {x, y} = joints_pos[i];
 				/* 				x = x + random(-1, 1);
 				y = y + random(-1, 1); */
+
 				let hue = h;
 				for (let i = 0; i < num; i++) {
-					x = x + random(-1, 1);
-					y = y + random(-1, 1);
+					let initX = x + random(-1, 1);
+					let initY = y + random(-1, 1);
+					x = initX;
+					y = initY;
 					scl1 = random([0.00095, 0.001, 0.0011, 0.0012, 0.0013]);
 					scl2 = scl1;
 
@@ -107,6 +109,8 @@ function draw() {
 					let p = new Particle(
 						x,
 						y,
+						initX,
+						initY,
 						initHue,
 						scl1 / MULTIPLIER,
 						scl2 / MULTIPLIER,
@@ -127,7 +131,7 @@ function draw() {
 
 		lastFrame = frame;
 	}
-
+	blendMode(ADD);
 	// delete particles if they are too old or alpha is at 0
 	for (let i = particles.length - 1; i >= 0; i--) {
 		let p = particles[i];
@@ -135,6 +139,7 @@ function draw() {
 			particles.splice(i, 1);
 		}
 	}
+	blendMode(BLEND);
 
 	for (let i = 0; i < particles.length; i++) {
 		let p = particles[i];
@@ -153,22 +158,19 @@ function draw() {
 }
 function drawUI() {
 	// Define the stroke color and weight (line width)
+	let centerX = width / 2;
+	let centerY = height / 2;
+	let borderX = (xMax * width) / 2;
+	let borderY = (yMax * height) / 2;
 	drawingContext.strokeStyle = 'black';
-	drawingContext.lineWidth = 2 * MULTIPLIER;
+	drawingContext.lineWidth = 4 * MULTIPLIER;
 	drawingContext.beginPath();
 
-	drawingContext.moveTo(xMin * width, yMin * height);
-	drawingContext.lineTo(xMax * width, yMin * height);
-
-	drawingContext.moveTo(xMin * width, yMax * height);
-	drawingContext.lineTo(xMax * width, yMax * height);
-
-	drawingContext.moveTo(xMin * width, yMin * height);
-	drawingContext.lineTo(xMin * width, yMax * height);
-
-	drawingContext.moveTo(xMax * width, yMin * height);
-	drawingContext.lineTo(xMax * width, yMax * height);
-
+	drawingContext.moveTo(centerX - borderX, centerY - borderY);
+	drawingContext.lineTo(centerX + borderX, centerY - borderY);
+	drawingContext.lineTo(centerX + borderX, centerY + borderY);
+	drawingContext.lineTo(centerX - borderX, centerY + borderY);
+	drawingContext.lineTo(centerX - borderX, centerY - borderY);
 	// Stroke the lines
 	drawingContext.stroke();
 }

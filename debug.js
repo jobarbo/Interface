@@ -133,16 +133,16 @@ function checkMIDI() {
 	//if any knob is changed, reset the particles
 
 	if (kname == '32') {
-		size = map(int(kval), 0, 100, 0.1, 1, true);
+		a = int(map(int(kval), 0, 100, 0, 100, true));
 	}
 	if (kname == '33') {
-		h = int(map(int(kval), 0, 100, -30, 30, true));
+		h = int(map(int(kval), 0, 100, 0, 360, true));
 	}
 	if (kname == '34') {
-		s = int(map(int(kval), 0, 100, -50, 50, true));
+		s = int(map(int(kval), 0, 100, -5, 5, true));
 	}
 	if (kname == '35') {
-		b = int(map(int(kval), 0, 100, -50, 50, true));
+		b = int(map(int(kval), 0, 100, -5, 5, true));
 	}
 	if (kname == '36') {
 		frame = int(map(int(kval), 0, 100, 0, framesMax / 4, true));
@@ -158,6 +158,15 @@ function checkMIDI() {
 	}
 	if (kname == '40') {
 		particles = [];
+	}
+	if (kname == '41') {
+		particles = [];
+		background(50, 5, 10);
+		scl1 = random([0.001, 0.0013, 0.0015, 0.0017, 0.002]);
+		scl2 = random([0.001, 0.0013, 0.0015, 0.0017, 0.002]);
+
+		ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
+		ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
 	}
 }
 
