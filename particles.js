@@ -53,9 +53,8 @@ class Particle {
 			this.clampvaluearray,
 			this.uvalue
 		);
-		let particle_dist = dist(this.x, this.y, this.ix, this.iy);
-		//this.xRandDivider = map(particle_dist, 0, 300, 0.1, 1, true);
-		//this.s = map(particle_dist, 0, 300, this.initS * 2, 0.3, true);
+		//let particle_dist = dist(this.x, this.y, this.ix, this.iy);
+
 		/* 		this.xRandDivider = random(0.01, 0.1);
 		this.yRandDivider = random(0.01, 0.1); */
 		this.xRandSkipper = random(-this.xRandSkipperVal * MULTIPLIER, this.xRandSkipperVal * MULTIPLIER);

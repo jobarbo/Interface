@@ -7,7 +7,7 @@ let bones = []; // Bones are connections between joints
 let frame = 0; // Keeps the currently displayed frame
 let lastFrame = frame;
 let framesMax; // Maximum number of frames, to loop the animation
-let scaleMotionData = 0.5; // Scale the figure on screen by a factor, "zoom"
+let scaleMotionData = 1.5; // Scale the figure on screen by a factor, "zoom"
 
 let num = 1000;
 let w = 1;
@@ -41,7 +41,7 @@ let init_done = false;
 
 function preload() {
 	// Import motion capture data
-	MCdata = loadJSON('Moonlight_frontal_by_Juliano_Nunes.json');
+	MCdata = loadJSON('DerLiebhaber_frontal_by_Marco_Goecke.json');
 	//MCdata = loadJSON('Edge_Me_Away_by_Emrecan_Tanis.json');
 	console.log(MCdata);
 }
