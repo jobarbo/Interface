@@ -7,9 +7,9 @@ let bones = []; // Bones are connections between joints
 let frame = 0; // Keeps the currently displayed frame
 let lastFrame = frame;
 let framesMax; // Maximum number of frames, to loop the animation
-let scaleMotionData = 1.5; // Scale the figure on screen by a factor, "zoom"
+let scaleMotionData = 1; // Scale the figure on screen by a factor, "zoom"
 
-let num = 2000;
+let num = 1000;
 let w = 1;
 let a = 100;
 let h = 0;
@@ -86,8 +86,10 @@ function draw() {
 		if (particles.length < 10000) {
 			for (let i = 0; i < joints_pos.length; i++) {
 				let {x, y} = joints_pos[i];
-				/* 				x = x + random(-1, 1);
-				y = y + random(-1, 1); */
+				/* 				let initX = x + random(-1, 1);
+				let initY = y + random(-1, 1);
+				x = initX;
+				y = initY; */
 
 				let hue = h;
 				for (let i = 0; i < num; i++) {
@@ -95,13 +97,13 @@ function draw() {
 					let initY = y + random(-1, 1);
 					x = initX;
 					y = initY;
-					scl1 = random([0.00095, 0.001, 0.0011, 0.0012, 0.0013]);
+					scl1 = random([0.0025]);
 					scl2 = scl1;
 
 					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
 					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
 
-					xRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12]);
+					xRandDivider = random([0.1, 0.11, 0.12, 0.13, 0.14, 0.15]);
 					yRandDivider = xRandDivider;
 					xMin = 0.1;
 					xMax = 0.9;

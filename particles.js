@@ -20,8 +20,8 @@ class Particle {
 		this.ang1 = ang1;
 		this.ang2 = ang2;
 		this.seed = seed;
-		this.xRandDivider = 0.1;
-		this.yRandDivider = 0.1;
+		this.xRandDivider = xRandDivider;
+		this.yRandDivider = yRandDivider;
 		this.xRandSkipper = 0;
 		this.yRandSkipper = 0;
 		this.xRandSkipperVal = 0;
@@ -30,13 +30,13 @@ class Particle {
 		this.xMax = xMax;
 		this.yMin = yMin;
 		this.yMax = yMax;
-		this.oct = 3;
+		this.oct = 1;
 		this.centerX = width / 2;
 		this.centerY = height / 2;
 		this.borderX = (xMax * width) / 2;
 		this.borderY = (yMax * height) / 2;
-		this.clampvaluearray = [0.15, 0.25, 0.25, 0.015];
-		this.uvalueInit = random([1, 3, 5, 7, 10, 12, 15, 20, 25, 30, 50]);
+		this.clampvaluearray = [0.15, 0.25, 0.25, 0.15];
+		this.uvalueInit = random([1, 3, 4, 5, 7, 10, 12, 15, 20, 25, 30, 50, 100]);
 		this.uvalue = this.uvalueInit;
 	}
 
@@ -84,8 +84,8 @@ class Particle {
 		//this.s -= 0.000001;
 		//this.s = clamp(this.s, 0, this.initS * 2);
 
-		this.sat = s;
-		this.bri = b;
+		this.sat = s + random(-5, 5);
+		this.bri = b + random(-5, 5);
 		//this.a = alpha;
 		//this.a -= 1.1;
 	}
