@@ -9,7 +9,7 @@ let lastFrame = frame;
 let framesMax; // Maximum number of frames, to loop the animation
 let scaleMotionData = 1.5; // Scale the figure on screen by a factor, "zoom"
 
-let num = 1000;
+let num = 5000;
 let w = 1;
 let a = 100;
 let h = 0;
@@ -51,7 +51,7 @@ function setup() {
 	MULTIPLIER = DIM / DEFAULT_SIZE;
 	//c = createCanvas(DIM, DIM * 1.446);
 	colorMode(HSB, 360, 100, 100, 100);
-	c = createCanvas(DIM, DIM);
+	c = createCanvas(windowWidth, windowHeight);
 
 	pixelDensity(3);
 
@@ -83,7 +83,7 @@ function draw() {
 	// if frame value changes, destroy all particles and create new ones
 	if (frame != lastFrame) {
 		let joints_pos = get_all_joint_pos(frame);
-		if (particles.length < 5000) {
+		if (particles.length < 20000) {
 			for (let i = 0; i < joints_pos.length; i++) {
 				let {x, y} = joints_pos[i];
 				/* 				x = x + random(-1, 1);
@@ -134,7 +134,7 @@ function draw() {
 
 		lastFrame = frame;
 	}
-	blendMode(ADD);
+	//blendMode(ADD);
 	// delete particles if they are too old or alpha is at 0
 	for (let i = particles.length - 1; i >= 0; i--) {
 		let p = particles[i];
@@ -142,7 +142,6 @@ function draw() {
 			particles.splice(i, 1);
 		}
 	}
-	blendMode(BLEND);
 
 	for (let i = 0; i < particles.length; i++) {
 		let p = particles[i];
@@ -156,7 +155,7 @@ function draw() {
 	if (particles.length < 10000) {
 		console.log('ok to draw more particles');
 	}
-
+	blendMode(BLEND);
 	drawUI();
 }
 function drawUI() {
