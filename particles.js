@@ -7,7 +7,7 @@ class Particle {
 		this.initHue = hue;
 		this.initSat = random([0, 10, 20, 20, 20, 30, 40, 40, 60, 80, 80, 90]);
 		this.initBri = random([0, 10, 20, 20, 40, 40, 60, 70, 80, 90, 100]);
-		this.initAlpha = a;
+		this.initAlpha = 100;
 		this.initS = size * MULTIPLIER;
 		this.hue = this.initHue;
 		this.sat = this.initSat;
@@ -36,11 +36,17 @@ class Particle {
 		this.borderX = (xMax * width) / 2;
 		this.borderY = (yMax * height) / 2;
 		this.clampvaluearray = [0.15, 0.25, 0.25, 0.015];
-		this.uvalue = random([1, 3, 5, 7, 10, 12, 15, 20, 50]);
+		this.uvalueInit = random([1, 3, 5, 7, 10, 12, 15, 20, 25, 30, 50]);
+		this.uvalue = this.uvalueInit;
 	}
 
 	update(alpha) {
 		// make the particles move according to noise;
+
+		/* 		let particle_dist = dist(this.x, this.y, this.ix, this.iy); */
+		/*  */
+		/* 		this.uvalue = int(map(particle_dist, 100, 200, this.uvalueInit, this.uvalueInit * 2, true)); */
+
 		let p = superCurve(
 			this.x,
 			this.y,
@@ -53,10 +59,6 @@ class Particle {
 			this.clampvaluearray,
 			this.uvalue
 		);
-		//let particle_dist = dist(this.x, this.y, this.ix, this.iy);
-
-		/* 		this.xRandDivider = random(0.01, 0.1);
-		this.yRandDivider = random(0.01, 0.1); */
 		this.xRandSkipper = random(-this.xRandSkipperVal * MULTIPLIER, this.xRandSkipperVal * MULTIPLIER);
 		this.yRandSkipper = random(-this.xRandSkipperVal * MULTIPLIER, this.xRandSkipperVal * MULTIPLIER);
 		this.x += (p.x * MULTIPLIER) / this.xRandDivider + this.xRandSkipper;
@@ -89,7 +91,7 @@ class Particle {
 	}
 
 	show() {
-		fill(h, this.sat, this.bri, 100);
+		fill(h, this.sat, this.bri, this.a);
 		noStroke();
 		rect(this.x, this.y, size);
 	}
