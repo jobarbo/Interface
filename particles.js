@@ -7,7 +7,7 @@ class Particle {
 		this.initHue = hue;
 		this.initSat = random([0, 10, 20, 20, 20, 30, 40, 40, 60, 80, 80, 90]);
 		this.initBri = random([0, 10, 20, 20, 40, 40, 60, 70, 80, 90, 100]);
-		this.initAlpha = 100;
+		this.initAlpha = 10;
 		this.initS = size * MULTIPLIER;
 		this.hue = this.initHue;
 		this.sat = this.initSat;
@@ -30,13 +30,13 @@ class Particle {
 		this.xMax = xMax;
 		this.yMin = yMin;
 		this.yMax = yMax;
-		this.oct = 1;
+		this.oct = 4;
 		this.centerX = width / 2;
 		this.centerY = height / 2;
 		this.borderX = (xMax * width) / 2;
 		this.borderY = (yMax * height) / 2;
-		this.clampvaluearray = [0.15, 0.25, 0.25, 0.15];
-		this.uvalueInit = random([1, 3, 4, 5, 7, 10, 12, 15, 20, 25, 30, 50, 100]);
+		this.clampvaluearray = [0.15, 0.25, 0.25, 0.015];
+		this.uvalueInit = random([1, 3, 4, 5, 7, 10, 12, 15, 20, 25]);
 		this.uvalue = this.uvalueInit;
 	}
 
@@ -66,26 +66,28 @@ class Particle {
 
 		this.x =
 			this.x <= this.centerX - this.borderX
-				? this.centerX + this.borderX + random(-4 * MULTIPLIER, 0)
+				? this.centerX + this.borderX + random(-1 * MULTIPLIER, 0)
 				: this.x >= this.centerX + this.borderX
-				? this.centerX - this.borderX + random(0, 4 * MULTIPLIER)
+				? this.centerX - this.borderX + random(0, 1 * MULTIPLIER)
 				: this.x;
 		this.y =
 			this.y <= this.centerY - this.borderY
-				? this.centerY + this.borderY + random(-4 * MULTIPLIER, 0)
+				? this.centerY + this.borderY + random(-1 * MULTIPLIER, 0)
 				: this.y >= this.centerY + this.borderY
-				? this.centerY - this.borderY + random(0, 4 * MULTIPLIER)
+				? this.centerY - this.borderY + random(0, 1 * MULTIPLIER)
 				: this.y;
 
 		let pxy = p.x - p.y;
+		this.sat += s;
+		this.bri += b;
+		this.sat = clamp(this.sat, -this.initSat, 100 + this.initSat);
+		this.bri = clamp(this.bri, -this.initBri, 100 + this.initBri);
 		this.hue += mapValue(p.x, -this.uvalue * 2, this.uvalue * 2, -this.hueStep, this.hueStep, true);
 		this.hue = this.hue > 360 ? this.hue - 360 : this.hue < 0 ? this.hue + 360 : this.hue;
 
 		//this.s -= 0.000001;
 		//this.s = clamp(this.s, 0, this.initS * 2);
 
-		this.sat = s + random(-5, 5);
-		this.bri = b + random(-5, 5);
 		//this.a = alpha;
 		//this.a -= 1.1;
 	}
@@ -125,8 +127,8 @@ function superCurve(x, y, scl1, scl2, ang1, ang2, seed, octave, clampvalueArr, u
 	let un = oct(nx, ny, scale1, 0, octave);
 	let vn = oct(nx, ny, scale2, 1, octave);
 
-	let u = mapValue(un, -clampvalueArr[0], clampvalueArr[1], -uvalue, uvalue, true);
-	let v = mapValue(vn, -clampvalueArr[2], clampvalueArr[3], -uvalue, uvalue, true);
+	let u = mapValue(un, -clampvalueArr[0], clampvalueArr[1], -uvalue, uvalue);
+	let v = mapValue(vn, -clampvalueArr[2], clampvalueArr[3], -uvalue, uvalue);
 
 	let p = createVector(u, v);
 	return p;

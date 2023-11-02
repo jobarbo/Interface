@@ -7,7 +7,7 @@ let bones = []; // Bones are connections between joints
 let frame = 0; // Keeps the currently displayed frame
 let lastFrame = frame;
 let framesMax; // Maximum number of frames, to loop the animation
-let scaleMotionData = 1; // Scale the figure on screen by a factor, "zoom"
+let scaleMotionData = 1.5; // Scale the figure on screen by a factor, "zoom"
 
 let num = 1000;
 let w = 1;
@@ -41,7 +41,7 @@ let init_done = false;
 
 function preload() {
 	// Import motion capture data
-	MCdata = loadJSON('DerLiebhaber_frontal_by_Marco_Goecke.json');
+	MCdata = loadJSON('Moonlight_frontal_by_Juliano_Nunes.json');
 	//MCdata = loadJSON('Edge_Me_Away_by_Emrecan_Tanis.json');
 	console.log(MCdata);
 }
@@ -49,11 +49,11 @@ function preload() {
 function setup() {
 	DIM = min(windowWidth, windowHeight);
 	MULTIPLIER = DIM / DEFAULT_SIZE;
-	//c = createCanvas(DIM, DIM * 1.446);
+	c = createCanvas(DIM, DIM);
 	colorMode(HSB, 360, 100, 100, 100);
-	c = createCanvas(windowWidth, windowHeight);
+	//c = createCanvas(windowWidth, windowHeight);
 
-	pixelDensity(3);
+	//pixelDensity(3);
 
 	framesMax = Object.keys(MCdata).length;
 	seed = random(100000);
@@ -65,7 +65,7 @@ function setup() {
 }
 
 function draw() {
-	//background(50, 5, 10);
+	//background(50, 5, 100);
 
 	// Draw joints
 	/* 	noStroke();
@@ -97,14 +97,14 @@ function draw() {
 					let initY = y + random(-1, 1);
 					x = initX;
 					y = initY;
-					scl1 = random([0.0025]);
+					scl1 = random([0.0008, 0.0009, 0.001, 0.0011, 0.0012]);
 					scl2 = scl1;
 
 					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
 					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
 
-					xRandDivider = random([0.1, 0.11, 0.12, 0.13, 0.14, 0.15]);
-					yRandDivider = xRandDivider;
+					xRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12, 0.13, 0.14, 0.15]);
+					yRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12, 0.13, 0.14, 0.15]);
 					xMin = 0.1;
 					xMax = 0.9;
 					yMin = 0.1;

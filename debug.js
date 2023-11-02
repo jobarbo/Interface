@@ -139,10 +139,12 @@ function checkMIDI() {
 		h = int(map(int(kval), 0, 100, 0, 360, true));
 	}
 	if (kname == '34') {
-		s = int(map(int(kval), 0, 100, 0, 100, true));
+		//s = int(map(int(kval), 0, 100, 0, 100, true));
+		s = int(map(int(kval), 0, 100, -5, 5, true));
 	}
 	if (kname == '35') {
-		b = int(map(int(kval), 0, 100, 0, 100, true));
+		//b = int(map(int(kval), 0, 100, 0, 100, true));
+		b = int(map(int(kval), 0, 100, -5, 5, true));
 	}
 	if (kname == '36') {
 		frame = int(map(int(kval), 0, 100, 0, framesMax / 4, true));
