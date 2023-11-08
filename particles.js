@@ -7,7 +7,7 @@ class Particle {
 		this.initHue = hue;
 		this.initSat = random([0, 10, 20, 20, 20, 30, 40, 40, 60, 80, 80, 90]);
 		this.initBri = random([0, 10, 20, 20, 40, 40, 60, 70, 80, 90, 100]);
-		this.initAlpha = 10;
+		this.initAlpha = 100;
 		this.initS = size * MULTIPLIER;
 		this.hue = this.initHue;
 		this.sat = this.initSat;
@@ -24,8 +24,8 @@ class Particle {
 		this.yRandDivider = yRandDivider;
 		this.xRandSkipper = 0;
 		this.yRandSkipper = 0;
-		this.xRandSkipperVal = 0;
-		this.yRandSkipperVal = 0;
+		this.xRandSkipperVal = 0.1;
+		this.yRandSkipperVal = 0.1;
 		this.xMin = xMin;
 		this.xMax = xMax;
 		this.yMin = yMin;
@@ -127,7 +127,7 @@ function superCurve(x, y, scl1, scl2, ang1, ang2, seed, octave, clampvalueArr, u
 	let un = oct(nx, ny, scale1, 0, octave);
 	let vn = oct(nx, ny, scale2, 1, octave);
 
-	let u = mapValue(un, -clampvalueArr[0], clampvalueArr[1], -uvalue, uvalue);
+	let u = mapValue(un, -clampvalueArr[0], clampvalueArr[1], -uvalue * 2, uvalue * 2);
 	let v = mapValue(vn, -clampvalueArr[2], clampvalueArr[3], -uvalue, uvalue);
 
 	let p = createVector(u, v);

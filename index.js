@@ -59,9 +59,14 @@ function setup() {
 	seed = random(100000);
 
 	h = random(360);
+	xMin = 0.1;
+	xMax = 0.9;
+	yMin = 0.1;
+	yMax = 0.9;
 
-	background(50, 5, 100);
+	background(h, 5, 100);
 	defineBones();
+	drawTexture(h);
 }
 
 function draw() {
@@ -98,17 +103,15 @@ function draw() {
 					x = initX;
 					y = initY;
 					scl1 = random([0.0008, 0.0009, 0.001, 0.0011, 0.0012]);
+					//scl1 = 0.006;
 					scl2 = scl1;
 
 					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
 					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
 
-					xRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12, 0.13, 0.14, 0.15]);
-					yRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12, 0.13, 0.14, 0.15]);
-					xMin = 0.1;
-					xMax = 0.9;
-					yMin = 0.1;
-					yMax = 0.9;
+					xRandDivider = random([0.08]);
+					yRandDivider = random([0.1]);
+
 					let initHue = hue + random(-1, 1);
 					initHue = initHue > 360 ? initHue - 360 : initHue < 0 ? initHue + 360 : initHue;
 					let p = new Particle(
@@ -166,8 +169,9 @@ function drawUI() {
 	let centerY = height / 2;
 	let borderX = (xMax * width) / 2;
 	let borderY = (yMax * height) / 2;
+
 	drawingContext.strokeStyle = 'black';
-	drawingContext.lineWidth = 4 * MULTIPLIER;
+	drawingContext.lineWidth = 1 * MULTIPLIER;
 	drawingContext.beginPath();
 
 	drawingContext.moveTo(centerX - borderX, centerY - borderY);
@@ -177,4 +181,39 @@ function drawUI() {
 	drawingContext.lineTo(centerX - borderX, centerY - borderY);
 	// Stroke the lines
 	drawingContext.stroke();
+}
+
+function drawTexture(hue) {
+	// draw 200000 small rects to create a texture
+	console.log('drawTexture');
+	xMin = 0.1;
+	xMax = 0.9;
+	yMin = 0.1;
+	yMax = 0.9;
+	let centerX = width / 2;
+	let centerY = height / 2;
+	let borderX = parseInt((xMax * width) / 2);
+	let borderY = parseInt((yMax * height) / 2);
+
+	for (let i = 0; i < 2000000; i++) {
+		// draw the texture only inside the borderX and borderY while taking xmin and ymin into account
+
+		let sw = Math.random() * MULTIPLIER;
+		// basic x and y variable and no need to take the width of particles into account
+		const x = centerX - borderX + sw / 2 + Math.random() * (2 * (borderX - sw / 2));
+		const y = centerY - borderY + sw / 2 + Math.random() * (2 * (borderY - sw / 2));
+		const circleX = centerX - borderX + sw + Math.random() * (2 * (borderX - sw));
+		const circleY = centerY - borderY + sw + Math.random() * (2 * (borderY - sw));
+		const rectX = x - sw / 2;
+		const rectY = y - sw / 2;
+		let h = hue + Math.random() * 2 - 1;
+		let s = [0, 2, 3, 4, 4, 5, 5, 6, 7, 10][parseInt(Math.random() * 10)];
+		let b = [0, 10, 20, 50, 100, 100, 100][parseInt(Math.random() * 7)];
+		drawingContext.fillStyle = `hsla(${h}, ${s}%, ${b}%, 100%)`;
+		drawingContext.fillRect(rectX, rectY, sw, sw);
+		// draw a circle
+		/* 		drawingContext.beginPath();
+		drawingContext.arc(circleX, circleY, sw, 0, 2 * Math.PI);
+		drawingContext.fill(); */
+	}
 }
