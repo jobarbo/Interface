@@ -147,7 +147,13 @@ function draw() {
 					scl2 = scl1;
 
 					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
-					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
+					ang2 = ang1;
+
+					//! amazeballs texture work
+					/* 					scl1 = 0.00001;
+					scl2 = 0.00001;
+					ang1 = 1;
+					ang2 = 10000000; */
 
 					xRandDivider = random([0.1]);
 					yRandDivider = random([0.1]);
@@ -184,7 +190,7 @@ function draw() {
 
 		lastFrame = frame;
 	}
-	blendMode(SCREEN);
+	//blendMode(SCREEN);
 	// delete particles if they are too old or alpha is at 0
 	for (let i = particles.length - 1; i >= 0; i--) {
 		let p = particles[i];
