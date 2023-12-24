@@ -39,9 +39,32 @@ let MULTIPLIER;
 
 let init_done = false;
 
+// Dom text elements
+let animation;
+let dom_margin;
+let dom_particleNum;
+let dom_frameNum;
+let dom_dpi;
+let dom_ratio;
+let dom_tilt;
+let dom_presentation;
+let dom_radius;
+let dom_dashboard;
+let dom_hash;
+let dom_spin;
+let edits = 0;
+
+// Modes
+let dashboard_mode = false;
+let rotation_mode = false;
+let border_mode = 0;
+let presentation = false;
+let ratio_name = "Bookmark";
+let dom_toggle = "";
+
 function preload() {
 	// Import motion capture data
-	MCdata = loadJSON('Moonlight_frontal_by_Juliano_Nunes.json');
+	MCdata = loadJSON("Moonlight_frontal_by_Juliano_Nunes.json");
 	//MCdata = loadJSON('Edge_Me_Away_by_Emrecan_Tanis.json');
 	console.log(MCdata);
 }
@@ -49,24 +72,41 @@ function preload() {
 function setup() {
 	DIM = min(windowWidth, windowHeight);
 	MULTIPLIER = DIM / DEFAULT_SIZE;
-	c = createCanvas(DIM, DIM);
+	c = createCanvas(windowWidth, windowHeight);
 	colorMode(HSB, 360, 100, 100, 100);
 	//c = createCanvas(windowWidth, windowHeight);
 
-	//pixelDensity(3);
+	pixelDensity(3);
 
 	framesMax = Object.keys(MCdata).length;
 	seed = random(100000);
 
 	h = random(360);
-	xMin = 0.1;
-	xMax = 0.9;
-	yMin = 0.1;
-	yMax = 0.9;
+	xMin = -0.01;
+	xMax = 1.01;
+	yMin = -0.01;
+	yMax = 1.01;
 
 	background(h, 5, 100);
 	defineBones();
-	drawTexture(h);
+
+	dom_margin = document.querySelector(".kb-params.margin");
+	dom_particleNum = document.querySelector(".kb-params.population");
+	dom_frameNum = document.querySelector(".kb-params.exposure");
+	dom_dpi = document.querySelector(".kb-params.dpi");
+	dom_ratio = document.querySelector(".kb-params.ratio");
+	dom_tilt = document.querySelector(".kb-params.tilt");
+	dom_presentation = document.querySelector(".kb-params.presentation");
+	dom_radius = document.querySelector(".kb-params.radius");
+	dom_dashboard = document.querySelector(".kb-params.dashboard");
+	dom_toggle = document.querySelector(".info-toggle");
+	dom_hash = document.querySelector(".hash");
+	dom_spin = document.querySelector(".spin-container");
+
+	// buttons
+	buttons = document.querySelectorAll("[data-button]");
+	handleEvent();
+	//drawTexture(h);
 }
 
 function draw() {
@@ -91,7 +131,7 @@ function draw() {
 		if (particles.length < 10000) {
 			for (let i = 0; i < joints_pos.length; i++) {
 				let {x, y} = joints_pos[i];
-				/* 				let initX = x + random(-1, 1);
+				/* let initX = x + random(-1, 1);
 				let initY = y + random(-1, 1);
 				x = initX;
 				y = initY; */
@@ -109,11 +149,16 @@ function draw() {
 					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
 					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
 
-					xRandDivider = random([0.08]);
+					xRandDivider = random([0.1]);
 					yRandDivider = random([0.1]);
 
 					let initHue = hue + random(-1, 1);
-					initHue = initHue > 360 ? initHue - 360 : initHue < 0 ? initHue + 360 : initHue;
+					initHue =
+						initHue > 360
+							? initHue - 360
+							: initHue < 0
+							? initHue + 360
+							: initHue;
 					let p = new Particle(
 						x,
 						y,
@@ -139,7 +184,7 @@ function draw() {
 
 		lastFrame = frame;
 	}
-	//blendMode(SCREEN);
+	blendMode(SCREEN);
 	// delete particles if they are too old or alpha is at 0
 	for (let i = particles.length - 1; i >= 0; i--) {
 		let p = particles[i];
@@ -158,10 +203,10 @@ function draw() {
 		frame = 0;
 	}
 	if (particles.length < 10000) {
-		console.log('ok to draw more particles');
+		//console.log('ok to draw more particles');
 	}
 	blendMode(BLEND);
-	drawUI();
+	//drawUI();
 }
 function drawUI() {
 	// Define the stroke color and weight (line width)
@@ -170,8 +215,12 @@ function drawUI() {
 	let borderX = (xMax * width) / 2;
 	let borderY = (yMax * height) / 2;
 
-	drawingContext.strokeStyle = 'black';
-	drawingContext.lineWidth = 1 * MULTIPLIER;
+	if (bgmode == 0) {
+		drawingContext.strokeStyle = "hsla(0, 5%, 100%, 100%)";
+	} else {
+		drawingContext.strokeStyle = "hsla(0, 5%, 10%, 100%)";
+	}
+	drawingContext.lineWidth = 4 * MULTIPLIER;
 	drawingContext.beginPath();
 
 	drawingContext.moveTo(centerX - borderX, centerY - borderY);
@@ -185,25 +234,29 @@ function drawUI() {
 
 function drawTexture(hue) {
 	// draw 200000 small rects to create a texture
-	console.log('drawTexture');
-	xMin = 0.1;
-	xMax = 0.9;
-	yMin = 0.1;
-	yMax = 0.9;
+	console.log("drawTexture");
+	xMin = -0.01;
+	xMax = 1.01;
+	yMin = -0.01;
+	yMax = 1.01;
 	let centerX = width / 2;
 	let centerY = height / 2;
 	let borderX = parseInt((xMax * width) / 2);
 	let borderY = parseInt((yMax * height) / 2);
 
-	for (let i = 0; i < 2000000; i++) {
+	for (let i = 0; i < 200000; i++) {
 		// draw the texture only inside the borderX and borderY while taking xmin and ymin into account
 
 		let sw = Math.random() * MULTIPLIER;
 		// basic x and y variable and no need to take the width of particles into account
-		const x = centerX - borderX + sw / 2 + Math.random() * (2 * (borderX - sw / 2));
-		const y = centerY - borderY + sw / 2 + Math.random() * (2 * (borderY - sw / 2));
-		const circleX = centerX - borderX + sw + Math.random() * (2 * (borderX - sw));
-		const circleY = centerY - borderY + sw + Math.random() * (2 * (borderY - sw));
+		const x =
+			centerX - borderX + sw / 2 + Math.random() * (2 * (borderX - sw / 2));
+		const y =
+			centerY - borderY + sw / 2 + Math.random() * (2 * (borderY - sw / 2));
+		const circleX =
+			centerX - borderX + sw + Math.random() * (2 * (borderX - sw));
+		const circleY =
+			centerY - borderY + sw + Math.random() * (2 * (borderY - sw));
 		const rectX = x - sw / 2;
 		const rectY = y - sw / 2;
 		let h = hue + Math.random() * 2 - 1;
@@ -216,4 +269,120 @@ function drawTexture(hue) {
 		drawingContext.arc(circleX, circleY, sw, 0, 2 * Math.PI);
 		drawingContext.fill(); */
 	}
+}
+
+function handleEvent() {
+	if (dom_toggle) {
+		dom_toggle.addEventListener("click", function (event) {
+			if (dom_toggle.classList.contains("active")) {
+				dom_toggle.classList.remove("active");
+				document.querySelector(".container").classList.remove("show");
+				document.querySelector(".info-wrapper").classList.remove("show");
+				document.querySelector(".save-wrapper").classList.remove("show");
+				document.querySelector(".button-wrapper").classList.remove("show");
+				document.querySelector(".icon").innerHTML = "i";
+			} else {
+				dom_toggle.classList.add("active");
+				document.querySelector(".container").classList.add("show");
+				document.querySelector(".info-wrapper").classList.add("show");
+				document.querySelector(".save-wrapper").classList.add("show");
+				document.querySelector(".button-wrapper").classList.add("show");
+				document.querySelector(".icon").innerHTML = "X";
+			}
+		});
+	}
+
+	// put an event listener on all the buttons
+
+	buttons.forEach((button) => {
+		button.addEventListener("click", function (event) {
+			if (button.classList.contains("btn-radius")) {
+				mod_border_radius();
+			}
+			if (button.classList.contains("btn-presentation")) {
+				mod_pres_mode();
+			}
+			if (button.classList.contains("btn-info")) {
+				mod_info_mode();
+			}
+			if (button.classList.contains("btn-tilt")) {
+				mod_tilt_mode();
+			}
+			if (button.classList.contains("btn-margin")) {
+				dom_dashboard.innerHTML = "Please wait...";
+				dom_spin.classList.add("active");
+				mod_margin_mode();
+			}
+			if (button.classList.contains("btn-ratio")) {
+				dom_dashboard.innerHTML = "Please wait...";
+				dom_spin.classList.add("active");
+				mod_ratio_mode();
+			}
+			if (button.classList.contains("btn-population")) {
+				dom_dashboard.innerHTML = "Please wait...";
+				dom_spin.classList.add("active");
+				mod_particle_mode();
+			}
+			if (button.classList.contains("btn-exposure")) {
+				dom_dashboard.innerHTML = "Please wait...";
+				dom_spin.classList.add("active");
+				mod_exposure_mode();
+			}
+			if (button.classList.contains("btn-dpi")) {
+				dom_dashboard.innerHTML = "Please wait...";
+				dom_spin.classList.add("active");
+				mod_dpi_mode();
+			}
+			if (button.classList.contains("btn-save")) {
+				dom_spin.classList.add("active");
+				saveArtwork();
+			}
+		});
+	});
+
+	// if d + any number is pressed, change the dpi for that number
+	document.addEventListener("keydown", function (event) {
+		if (event.key === "b") {
+			mod_border_radius();
+		}
+
+		// Check if the pressed key is "d" and a number
+		if (event.key === "v") {
+			// toggle presentation mode on or off
+			mod_pres_mode();
+		}
+
+		if (event.key === "i") {
+			// toggle info dashboard
+			mod_info_mode();
+		}
+
+		if (event.key === "t") {
+			mod_tilt_mode();
+		}
+
+		if (event.key === "m") {
+			// toggle margin on or off
+			mod_margin_mode();
+		}
+		if (event.key === "r") {
+			// change the ratio
+			mod_ratio_mode();
+		}
+
+		if (event.key === "p") {
+			// change the particle number
+			mod_particle_mode();
+		}
+
+		if (event.key === "f") {
+			// change the frame number
+			mod_exposure_mode();
+		}
+
+		if (event.key === "d") {
+			// change the dpi
+			mod_dpi_mode();
+		}
+	});
 }

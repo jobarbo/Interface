@@ -34,5 +34,102 @@
 		<script language="javascript" type="text/javascript" src="index.js"></script>
 	</head>
 
-	<body></body>
+	<body>
+		<div class="info-toggle show"><p class="icon">i</p></div>
+		<div class="container">
+			<div class="title-wrapper">
+				<h1 class="title">EX-LIBRIS</h1>
+				<h3 class="subtitle">By Jonathan Barbeau</h3>
+				<h6 class="spec">Released December 20 2023 on fx(hash)</h6>
+				<p class="status">
+					Activity status:
+					<span class="spin-container">
+						<span class="spin">.</span>
+					</span>
+				</p>
+			</div>
+
+			<div class="info-wrapper">
+				<hr />
+				<p class="info-container">
+					<span class="info">Hash : </span><span class="kb-params hash"></span>
+				</p>
+				<hr />
+				<p class="info-container">
+					<span class="info">[M] -> Margin : </span
+					><span class="kb-params margin"></span>
+				</p>
+				<hr />
+				<p class="info-container">
+					<span class="info">[P] -> Population : </span
+					><span class="kb-params population"></span>
+				</p>
+				<hr />
+				<p class="info-container">
+					<span class="info">[R] -> Ratio : </span
+					><span class="kb-params ratio"></span>
+				</p>
+				<hr />
+				<p class="info-container">
+					<span class="info">[D] -> Print DPI : </span
+					><span class="kb-params dpi"></span>
+				</p>
+				<hr />
+				<p class="info-container">
+					<span class="info">[F] -> Exposure : </span
+					><span class="kb-params exposure"></span>
+				</p>
+				<hr />
+				<p class="info-container">
+					<span class="info">[B] -> Border Radius : </span
+					><span class="kb-params radius"></span>
+				</p>
+				<hr />
+				<p class="info-container">
+					<span class="info">[T] -> Horizontal : </span
+					><span class="kb-params tilt"></span>
+				</p>
+				<hr />
+				<p class="info-container">
+					<span class="info">[V] -> Presentation : </span
+					><span class="kb-params presentation"></span>
+				</p>
+				<hr />
+				<p class="info-container">
+					<span class="info">Information : </span
+					><span class="kb-params dashboard"></span>
+				</p>
+				<hr />
+				<p class="info-container"></p>
+			</div>
+			<div class="button-wrapper">
+				<button data-button class="button btn-margin">
+					<span>Margin</span>
+				</button>
+				<button data-button class="button btn-population">
+					<span>Population</span>
+				</button>
+				<button data-button class="button btn-ratio"><span>Ratio</span></button>
+				<button data-button class="button btn-dpi"><span>DPI</span></button>
+				<button data-button class="button btn-exposure">
+					<span>Exposure</span>
+				</button>
+				<button data-button class="button btn-radius">
+					<span>Border Radius</span>
+				</button>
+				<button data-button class="button btn-tilt">
+					<span>Horizontal</span>
+				</button>
+				<button data-button class="button btn-presentation">
+					<span>Presentation</span>
+				</button>
+			</div>
+			<div class="save-wrapper">
+				<button data-button class="button btn-save">
+					<span>Download</span>
+				</button>
+			</div>
+		</div>
+		<!-- WEBPACK will inject the bundle.js here -->
+	</body>
 </html>

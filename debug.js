@@ -129,11 +129,16 @@ function remapPos(x, y) {
 	return {x: x1, y: y1};
 }
 
+let bgmode = 0;
+let pressOnce = false;
+let timer;
+
 function checkMIDI() {
 	//if any knob is changed, reset the particles
 
 	if (kname == '32') {
 		size = map(int(kval), 0, 100, 0.01, 1, true);
+		//a = map(int(kval), 0, 100, 0, 100, true);
 	}
 	if (kname == '33') {
 		h = int(map(int(kval), 0, 100, 0, 360, true));
@@ -158,18 +163,40 @@ function checkMIDI() {
 	if (kname == '39') {
 		frame = int(map(int(kval), 0, 100, framesMax / 2, framesMax, true));
 	}
-	if (kname == '40') {
+	if (kname == '40' && pressOnce == false) {
 		particles = [];
+		pressOnce = true;
+		return;
 	}
 
-	if (kname == '41') {
+	if (kname == '41' && pressOnce == false) {
 		particles = [];
-		clear();
+		bgmode = 0;
 		background(50, 5, 100);
+		h = random(360);
+		//drawTexture(h);
+		pressOnce = true;
+		return;
 	}
-	if (kname == '42') {
+	if (kname == '42' && pressOnce == false) {
 		particles = [];
+		bgmode = 1;
 		background(50, 5, 10);
+		h = random(360);
+		//drawTexture(h);
+		pressOnce = true;
+		return;
+	}
+
+	if(pressOnce == true){
+		kname = '';
+		// set pressOnce to false after 1000ms
+		timer = setTimeout(() => {
+			pressOnce = false;
+		} , 1000);
+
+	} else {
+		clearTimeout(timer);
 	}
 }
 
