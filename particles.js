@@ -1,22 +1,5 @@
 class Particle {
-	constructor(
-		x,
-		y,
-		ix,
-		iy,
-		hue,
-		scl1,
-		scl2,
-		ang1,
-		ang2,
-		xMin,
-		xMax,
-		yMin,
-		yMax,
-		xRandDivider,
-		yRandDivider,
-		seed
-	) {
+	constructor(x, y, ix, iy, hue, scl1, scl2, ang1, ang2, xMin, xMax, yMin, yMax, xRandDivider, yRandDivider, seed) {
 		this.x = x;
 		this.y = y;
 		this.ix = ix;
@@ -56,10 +39,10 @@ class Particle {
 		this.borderY = (yMax * height) / 2;
 		this.clampvaluearray = [0.15, 0.25, 0.25, 0.015];
 		this.uvalueInit = random([1, 3, 4, 5, 7, 10, 12, 15, 20, 25]);
-		this.uvalue = this.uvalueInit;
+		this.uvalue = [this.uvalueInit, this.uvalueInit, this.uvalueInit, this.uvalueInit];
 		this.zombie = false;
 		this.zombieAlpha = this.initAlpha;
-		this.lineWeight = 1.001;
+		this.lineWeight = 101.001;
 	}
 
 	update(alpha) {
@@ -69,36 +52,14 @@ class Particle {
 		/*  */
 		/* 		this.uvalue = int(map(particle_dist, 100, 200, this.uvalueInit, this.uvalueInit * 2, true)); */
 
-		let p = superCurve(
-			this.x,
-			this.y,
-			this.scl1,
-			this.scl2,
-			this.ang1,
-			this.ang2,
-			this.seed,
-			this.oct,
-			this.clampvaluearray,
-			this.uvalue
-		);
-		this.xRandSkipper = random(
-			-this.xRandSkipperVal * MULTIPLIER,
-			this.xRandSkipperVal * MULTIPLIER
-		);
-		this.yRandSkipper = random(
-			-this.xRandSkipperVal * MULTIPLIER,
-			this.xRandSkipperVal * MULTIPLIER
-		);
+		let p = superCurve(this.x, this.y, this.scl1, this.scl2, this.ang1, this.ang2, this.seed, this.oct, this.clampvaluearray, this.uvalue);
+		this.xRandSkipper = random(-this.xRandSkipperVal * MULTIPLIER, this.xRandSkipperVal * MULTIPLIER);
+		this.yRandSkipper = random(-this.xRandSkipperVal * MULTIPLIER, this.xRandSkipperVal * MULTIPLIER);
 		this.x += (p.x * MULTIPLIER) / this.xRandDivider + this.xRandSkipper;
 		this.y += (p.y * MULTIPLIER) / this.yRandDivider + this.yRandSkipper;
 
-		if (
-			this.x < this.xMin * width ||
-			this.x > this.xMax * width ||
-			this.y < this.yMin * height ||
-			this.y > this.yMax * height
-		) {
-			this.a = 0;
+		if (this.x < this.xMin * width || this.x > this.xMax * width || this.y < this.yMin * height || this.y > this.yMax * height) {
+			this.a = 100;
 			this.zombie = true;
 		} else {
 			this.a = this.zombie ? this.zombieAlpha : this.initAlpha;
@@ -106,18 +67,22 @@ class Particle {
 
 		if (this.x < this.xMin * width - this.lineWeight) {
 			this.x = this.xMax * width + random() * this.lineWeight;
+			this.y = this.y + random() * this.lineWeight;
 			//this.a = 100;
 		}
 		if (this.x > this.xMax * width + this.lineWeight) {
 			this.x = this.xMin * width - random() * this.lineWeight;
+			this.y = this.y + random() * this.lineWeight;
 			//this.a = 100;
 		}
 		if (this.y < this.yMin * height - this.lineWeight) {
 			this.y = this.yMax * height + random() * this.lineWeight;
+			this.x = this.x + random() * this.lineWeight;
 			//this.a = 100;
 		}
 		if (this.y > this.yMax * height + this.lineWeight) {
 			this.y = this.yMin * height - random() * this.lineWeight;
+			this.x = this.x + random() * this.lineWeight;
 			//this.a = 100;
 		}
 
@@ -128,20 +93,8 @@ class Particle {
 		this.bri = b + this.rndBri; */
 		this.sat = clamp(this.sat, -this.initSat, 100 + this.initSat);
 		this.bri = clamp(this.bri, -this.initBri, 100 + this.initBri);
-		this.hue += mapValue(
-			p.x,
-			-this.uvalue * 2,
-			this.uvalue * 2,
-			-this.hueStep,
-			this.hueStep,
-			true
-		);
-		this.hue =
-			this.hue > 360
-				? this.hue - 360
-				: this.hue < 0
-				? this.hue + 360
-				: this.hue;
+		this.hue += mapValue(p.x, -this.uvalue * 2, this.uvalue * 2, -this.hueStep, this.hueStep, true);
+		this.hue = this.hue > 360 ? this.hue - 360 : this.hue < 0 ? this.hue + 360 : this.hue;
 	}
 
 	show() {
@@ -151,18 +104,7 @@ class Particle {
 	}
 }
 
-function superCurve(
-	x,
-	y,
-	scl1,
-	scl2,
-	ang1,
-	ang2,
-	seed,
-	octave,
-	clampvalueArr,
-	uvalue
-) {
+function superCurve(x, y, scl1, scl2, ang1, ang2, seed, octave, clampvalueArr, uvalue) {
 	let nx = x,
 		ny = y,
 		a1 = ang1,
@@ -171,6 +113,7 @@ function superCurve(
 		scale2 = scl2,
 		dx,
 		dy;
+	u_value = uvalue;
 
 	dx = oct(nx, ny, scale1, 0, octave);
 	dy = oct(nx, ny, scale2, 1, octave);
@@ -190,8 +133,8 @@ function superCurve(
 	let un = oct(nx, ny, scale1, 6, octave);
 	let vn = oct(nx, ny, scale2, 7, octave);
 
-	let u = mapValue(un, -clampvalueArr[0], clampvalueArr[1], -uvalue, uvalue);
-	let v = mapValue(vn, -clampvalueArr[2], clampvalueArr[3], -uvalue, uvalue);
+	let u = mapValue(un, -clampvalueArr[0], clampvalueArr[1], -u_value[0], u_value[1]);
+	let v = mapValue(vn, -clampvalueArr[2], clampvalueArr[3], -u_value[2], u_value[3]);
 
 	let p = createVector(u, v);
 	return p;

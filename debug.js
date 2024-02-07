@@ -52,12 +52,7 @@ function drawBones(frame) {
 		}
 		if (j1 && j2) {
 			stroke(0, 0, 0, 100);
-			line(
-				j1.x + random(-1, 1),
-				j1.y + random(-1, 1),
-				j2.x + random(-1, 1),
-				j2.y + random(-1, 1)
-			);
+			line(j1.x + random(-1, 1), j1.y + random(-1, 1), j2.x + random(-1, 1), j2.y + random(-1, 1));
 		}
 	}
 }
@@ -130,7 +125,7 @@ function get_joint_pos(frame, joint_name) {
 
 function remapPos(x, y) {
 	let x1 = map(x, 0, 1, -width / 2, width / 2) * scaleMotionData + width / 2;
-	let y1 = map(y, 0, 1, -height / 2, height / 2) * scaleMotionData + height / 2;
+	let y1 = map(y, 0, 1, -height / 2, height / 2) * scaleMotionData + height / 1.5;
 	return {x: x1, y: y1};
 }
 
@@ -142,7 +137,9 @@ function checkMIDI() {
 	//if any knob is changed, reset the particles
 
 	if (kname == "32") {
-		size = map(int(kval), 0, 100, 0.01, 1, true);
+		//size = map(int(kval), 0, 100, 0.01, 0.5, true);
+		p_rand = int(map(int(kval), 0, 100, 0, 15));
+		console.log(p_rand);
 		//a = map(int(kval), 0, 100, 0, 100, true);
 	}
 	if (kname == "33") {
@@ -180,6 +177,7 @@ function checkMIDI() {
 		background(50, 5, 100);
 		h = random(360);
 		//drawTexture(h);
+		blend_mode = "BLEND";
 		pressOnce = true;
 		return;
 	}
@@ -188,6 +186,7 @@ function checkMIDI() {
 		bgmode = 1;
 		background(50, 5, 10);
 		h = random(360);
+		blend_mode = "ADD";
 		//drawTexture(h);
 		pressOnce = true;
 		return;
@@ -204,12 +203,9 @@ function checkMIDI() {
 	}
 }
 
-let mapValue = (v, s, S, a, b) => (
-	(v = Math.min(Math.max(v, s), S)), ((v - s) * (b - a)) / (S - s) + a
-);
+let mapValue = (v, s, S, a, b) => ((v = Math.min(Math.max(v, s), S)), ((v - s) * (b - a)) / (S - s) + a);
 let clamp = (x, a, b) => (x < a ? a : x > b ? b : x);
-let smoothstep = (a, b, x) =>
-	((x -= a), (x /= b - a)) < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x);
+let smoothstep = (a, b, x) => (((x -= a), (x /= b - a)) < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x));
 let mix = (a, b, p) => a + p * (b - a);
 let dot = (v1, v2) => v1.x * v2.x + v1.y * v2.y;
 
@@ -259,38 +255,10 @@ document.addEventListener("keydown", saveCanvas);
 
 // make a function to save the canvas as a png file with the git branch name and a timestamp
 function saveArtwork() {
-	var dayoftheweek = [
-		"sunday",
-		"monday",
-		"tuesday",
-		"wednesday",
-		"thursday",
-		"friday",
-		"saturday",
-	];
-	var monthoftheyear = [
-		"january",
-		"february",
-		"march",
-		"april",
-		"may",
-		"june",
-		"july",
-		"august",
-		"september",
-		"october",
-		"november",
-		"december",
-	];
+	var dayoftheweek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+	var monthoftheyear = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
 	var d = new Date();
-	var datestring =
-		d.getDate() +
-		"_" +
-		`${d.getMonth() + 1}` +
-		"_" +
-		d.getFullYear() +
-		"_" +
-		`${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+	var datestring = d.getDate() + "_" + `${d.getMonth() + 1}` + "_" + d.getFullYear() + "_" + `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
 	var fileName = datestring + ".png";
 
 	save(fileName);

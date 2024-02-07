@@ -16,7 +16,9 @@ let h = 0;
 let s = 0;
 let b = 0;
 let o = 1;
-let size = 0.1;
+let p_rand = 0;
+let size = 0.25;
+let blend_mode = "BLEND";
 
 let particles = [];
 let scl1;
@@ -30,6 +32,9 @@ let xMax;
 let yMin;
 let yMax;
 let startTime;
+
+let maxDPI = 3;
+let RATIO = 1.44;
 let maxFrames = 60;
 let DEFAULT_SIZE = 3600;
 let W = window.innerWidth;
@@ -64,18 +69,16 @@ let dom_toggle = "";
 
 function preload() {
 	// Import motion capture data
-	MCdata = loadJSON("Moonlight_frontal_by_Juliano_Nunes.json");
-	//MCdata = loadJSON('Edge_Me_Away_by_Emrecan_Tanis.json');
+	//MCdata = loadJSON("Moonlight_frontal_by_Juliano_Nunes.json");
+	MCdata = loadJSON("Edge_Me_Away_by_Emrecan_Tanis.json");
 	console.log(MCdata);
 }
 
 function setup() {
 	DIM = min(windowWidth, windowHeight);
 	MULTIPLIER = DIM / DEFAULT_SIZE;
-	c = createCanvas(windowWidth, windowHeight);
+	c = createCanvas(DIM, DIM * RATIO);
 	colorMode(HSB, 360, 100, 100, 100);
-	//c = createCanvas(windowWidth, windowHeight);
-
 	pixelDensity(3);
 
 	framesMax = Object.keys(MCdata).length;
@@ -106,6 +109,7 @@ function setup() {
 	// buttons
 	buttons = document.querySelectorAll("[data-button]");
 	handleEvent();
+
 	//drawTexture(h);
 }
 
@@ -138,16 +142,15 @@ function draw() {
 
 				let hue = h;
 				for (let i = 0; i < num; i++) {
-					let initX = x + random(-1, 1);
-					let initY = y + random(-1, 1);
+					let initX = x + random(-p_rand, p_rand);
+					let initY = y + random(-p_rand, p_rand);
 					x = initX;
 					y = initY;
-					scl1 = random([0.0008, 0.0009, 0.001, 0.0011, 0.0012]);
-					//scl1 = 0.006;
-					scl2 = scl1;
+					scl1 = random([0.001, 0.0011, 0.0012, 0.0015]);
+					scl2 = random([0.001, 0.0011, 0.0012, 0.0015]);
 
-					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
-					ang2 = ang1;
+					ang1 = int(random([1, 5, 10, 20, 40, 80, 160]));
+					ang2 = int(random([1, 5, 10, 20, 40, 80, 160]));
 
 					//! amazeballs texture work
 					/* 					scl1 = 0.00001;
@@ -159,30 +162,8 @@ function draw() {
 					yRandDivider = random([0.1]);
 
 					let initHue = hue + random(-1, 1);
-					initHue =
-						initHue > 360
-							? initHue - 360
-							: initHue < 0
-							? initHue + 360
-							: initHue;
-					let p = new Particle(
-						x,
-						y,
-						initX,
-						initY,
-						initHue,
-						scl1 / MULTIPLIER,
-						scl2 / MULTIPLIER,
-						ang1 * MULTIPLIER,
-						ang2 * MULTIPLIER,
-						xMin,
-						xMax,
-						yMin,
-						yMax,
-						xRandDivider,
-						yRandDivider,
-						seed
-					);
+					initHue = initHue > 360 ? initHue - 360 : initHue < 0 ? initHue + 360 : initHue;
+					let p = new Particle(x, y, initX, initY, initHue, scl1 / MULTIPLIER, scl2 / MULTIPLIER, ang1 * MULTIPLIER, ang2 * MULTIPLIER, xMin, xMax, yMin, yMax, xRandDivider, yRandDivider, seed);
 					particles.push(p);
 				}
 			}
@@ -190,7 +171,12 @@ function draw() {
 
 		lastFrame = frame;
 	}
-	//blendMode(SCREEN);
+	if (blend_mode == "ADD") {
+		blendMode(ADD);
+	} else {
+		blendMode(BLEND);
+	}
+
 	// delete particles if they are too old or alpha is at 0
 	for (let i = particles.length - 1; i >= 0; i--) {
 		let p = particles[i];
@@ -208,10 +194,9 @@ function draw() {
 	if (frame >= framesMax) {
 		frame = 0;
 	}
-	if (particles.length < 10000) {
-		//console.log('ok to draw more particles');
-	}
+
 	blendMode(BLEND);
+
 	//drawUI();
 }
 function drawUI() {
@@ -255,14 +240,10 @@ function drawTexture(hue) {
 
 		let sw = Math.random() * MULTIPLIER;
 		// basic x and y variable and no need to take the width of particles into account
-		const x =
-			centerX - borderX + sw / 2 + Math.random() * (2 * (borderX - sw / 2));
-		const y =
-			centerY - borderY + sw / 2 + Math.random() * (2 * (borderY - sw / 2));
-		const circleX =
-			centerX - borderX + sw + Math.random() * (2 * (borderX - sw));
-		const circleY =
-			centerY - borderY + sw + Math.random() * (2 * (borderY - sw));
+		const x = centerX - borderX + sw / 2 + Math.random() * (2 * (borderX - sw / 2));
+		const y = centerY - borderY + sw / 2 + Math.random() * (2 * (borderY - sw / 2));
+		const circleX = centerX - borderX + sw + Math.random() * (2 * (borderX - sw));
+		const circleY = centerY - borderY + sw + Math.random() * (2 * (borderY - sw));
 		const rectX = x - sw / 2;
 		const rectY = y - sw / 2;
 		let h = hue + Math.random() * 2 - 1;
