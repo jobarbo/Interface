@@ -16,7 +16,7 @@ let h = 0;
 let s = 0;
 let b = 0;
 let o = 1;
-let p_rand = 0;
+let p_rand = 0.2;
 let size = 0.25;
 let blend_mode = "BLEND";
 
@@ -34,7 +34,7 @@ let yMax;
 let startTime;
 
 let maxDPI = 3;
-let RATIO = 1.44;
+let RATIO = 1.7777;
 let maxFrames = 60;
 let DEFAULT_SIZE = 3600;
 let W = window.innerWidth;
@@ -70,14 +70,14 @@ let dom_toggle = "";
 function preload() {
 	// Import motion capture data
 	//MCdata = loadJSON("Moonlight_frontal_by_Juliano_Nunes.json");
-	MCdata = loadJSON("Edge_Me_Away_by_Emrecan_Tanis.json");
+	MCdata = loadJSON("Moonlight_frontal_by_Juliano_Nunes.json");
 	console.log(MCdata);
 }
 
 function setup() {
 	DIM = min(windowWidth, windowHeight);
 	MULTIPLIER = DIM / DEFAULT_SIZE;
-	c = createCanvas(DIM, DIM * RATIO);
+	c = createCanvas(DIM * RATIO, DIM);
 	colorMode(HSB, 360, 100, 100, 100);
 	pixelDensity(3);
 
@@ -135,10 +135,10 @@ function draw() {
 		if (particles.length < 10000) {
 			for (let i = 0; i < joints_pos.length; i++) {
 				let {x, y} = joints_pos[i];
-				/* let initX = x + random(-1, 1);
-				let initY = y + random(-1, 1);
-				x = initX;
-				y = initY; */
+				// let initX = x + random(-1, 1);
+				//let initY = y + random(-1, 1);
+				//x = initX;
+				//y = initY;
 
 				let hue = h;
 				for (let i = 0; i < num; i++) {
@@ -153,10 +153,10 @@ function draw() {
 					ang2 = int(random([1, 5, 10, 20, 40, 80, 160]));
 
 					//! amazeballs texture work
-					/* 					scl1 = 0.00001;
-					scl2 = 0.00001;
-					ang1 = 1;
-					ang2 = 10000000; */
+					//scl1 = 0.00001;
+					//scl2 = 0.00001;
+					//ang1 = 1;
+					//ang2 = 10000000;
 
 					xRandDivider = random([0.1]);
 					yRandDivider = random([0.1]);

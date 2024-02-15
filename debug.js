@@ -40,57 +40,80 @@ function defineBones() {
 function drawBones(frame) {
 	let joints = MCdata[frame];
 	let j1, j2;
-	for (let i = 0; i < bones.length; i++) {
-		let bone = bones[i];
+	let it = 1;
 
-		let joint1 = joints.find((item) => item.name === bone[0]);
-		let joint2 = joints.find((item) => item.name === bone[1]);
+	if (joints.length > 0) {
+		for (let i = 0; i < bones.length; i++) {
+			let bone = bones[i];
 
-		if (joint1 && joint2) {
-			j1 = remapPos(joint1.x, joint1.y);
-			j2 = remapPos(joint2.x, joint2.y);
+			let joint1 = joints.find((item) => item.name === bone[0]);
+			let joint2 = joints.find((item) => item.name === bone[1]);
+
+			if (joint1 && joint2) {
+				j1 = remapPos(joint1.x, joint1.y);
+				j2 = remapPos(joint2.x, joint2.y);
+			}
+			if (j1 && j2) {
+				stroke(0, 0, 0, 100);
+				line(j1.x + random(-1, 1), j1.y + random(-1, 1), j2.x + random(-1, 1), j2.y + random(-1, 1));
+			}
 		}
-		if (j1 && j2) {
-			stroke(0, 0, 0, 100);
-			line(j1.x + random(-1, 1), j1.y + random(-1, 1), j2.x + random(-1, 1), j2.y + random(-1, 1));
+	} else {
+		it++;
+		drawBones(frame - it);
+
+		if (frame - it < 0) {
+			return;
 		}
 	}
 }
 
 function drawJoints(frame) {
 	let joints = MCdata[frame];
+	console.log(joints);
 	let j;
 	let previousJoints = MCdata[frame];
 	let pj;
-
+	let it = 1;
 	if (frame > 0) {
 		previousJoints = MCdata[frame - 1];
 	}
-	for (let i = 0; i < joints.length; i++) {
-		let {x, y, type, name} = joints[i];
 
-		// In this example we use only body joints, not detailed hands joints
-		if (type === "body") {
-			let {x: px, y: py} = previousJoints[i];
-			j = remapPos(x, y);
-			pj = remapPos(px, py);
+	if (joints.length > 0 && previousJoints.length > 0) {
+		for (let i = 0; i < joints.length; i++) {
+			let {x, y, type, name} = joints[i];
 
-			// convert j and pj to vectors
-			j = createVector(j.x, j.y);
-			pj = createVector(pj.x, pj.y);
+			// In this example we use only body joints, not detailed hands joints
+			if (type === "body") {
+				let {x: px, y: py} = previousJoints[i];
+				j = remapPos(x, y);
+				pj = remapPos(px, py);
 
-			// calculate the distance between the two vectors
+				// convert j and pj to vectors
+				j = createVector(j.x, j.y);
+				pj = createVector(pj.x, pj.y);
 
-			let sw = 1;
+				// calculate the distance between the two vectors
 
-			if (j) {
-				//circle(j.x, j.y, 50);
+				let sw = 1;
 
-				strokeWeight(sw);
-				stroke(0, 50, 100);
-				noFill();
-				ellipse(j.x, j.y, 50, 50);
+				if (j) {
+					//circle(j.x, j.y, 50);
+
+					strokeWeight(sw);
+					stroke(0, 50, 100);
+					noFill();
+					ellipse(j.x, j.y, 50, 50);
+				}
 			}
+		}
+	} else {
+		// draw previous joints
+		it++;
+		drawJoints(frame - it);
+
+		if (frame - it < 0) {
+			return;
 		}
 	}
 }
@@ -125,7 +148,7 @@ function get_joint_pos(frame, joint_name) {
 
 function remapPos(x, y) {
 	let x1 = map(x, 0, 1, -width / 2, width / 2) * scaleMotionData + width / 2;
-	let y1 = map(y, 0, 1, -height / 2, height / 2) * scaleMotionData + height / 1.5;
+	let y1 = map(y, 0, 1, -height / 2, height / 2) * scaleMotionData + height / 2;
 	return {x: x1, y: y1};
 }
 
@@ -137,9 +160,8 @@ function checkMIDI() {
 	//if any knob is changed, reset the particles
 
 	if (kname == "32") {
-		//size = map(int(kval), 0, 100, 0.01, 0.5, true);
-		p_rand = int(map(int(kval), 0, 100, 0, 15));
-		console.log(p_rand);
+		size = map(int(kval), 0, 100, 0.01, 0.5, true);
+		//p_rand = int(map(int(kval), 0, 100, 1, 15));
 		//a = map(int(kval), 0, 100, 0, 100, true);
 	}
 	if (kname == "33") {
@@ -147,23 +169,23 @@ function checkMIDI() {
 	}
 	if (kname == "34") {
 		//s = int(map(int(kval), 0, 100, 0, 100, true));
-		s = int(map(int(kval), 0, 100, -5, 5, true));
+		s = map(int(kval), 0, 100, -0.5, 0.5, true);
 	}
 	if (kname == "35") {
 		//b = int(map(int(kval), 0, 100, 0, 100, true));
-		b = int(map(int(kval), 0, 100, -5, 5, true));
+		b = map(int(kval), 0, 100, -0.5, 0.5, true);
 	}
 	if (kname == "36") {
 		frame = int(map(int(kval), 0, 100, 0, framesMax / 4, true));
 	}
 	if (kname == "37") {
-		frame = int(map(int(kval), 0, 100, framesMax / 4, framesMax / 3, true));
+		frame = int(map(int(kval), 0, 100, framesMax / 4, framesMax / 2, true));
 	}
 	if (kname == "38") {
-		frame = int(map(int(kval), 0, 100, framesMax / 3, framesMax / 2, true));
+		frame = int(map(int(kval), 0, 100, framesMax / 2, (framesMax / 4) * 3, true));
 	}
 	if (kname == "39") {
-		frame = int(map(int(kval), 0, 100, framesMax / 2, framesMax, true));
+		frame = int(map(int(kval), 0, 100, (framesMax / 4) * 3, framesMax, true));
 	}
 	if (kname == "40" && pressOnce == false) {
 		particles = [];
