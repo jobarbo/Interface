@@ -146,11 +146,14 @@ function draw() {
 					let initY = y + random(-p_rand, p_rand);
 					x = initX;
 					y = initY;
-					scl1 = random([0.001, 0.0011, 0.0012, 0.0015]);
-					scl2 = random([0.001, 0.0011, 0.0012, 0.0015]);
+					scl1 = random([0.00035, 0.00065, 0.00095, 0.0011, 0.0015]);
+					scl2 = scl1;
 
-					ang1 = int(random([1, 5, 10, 20, 40, 80, 160]));
-					ang2 = int(random([1, 5, 10, 20, 40, 80, 160]));
+					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
+					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
+
+					xRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12]);
+					yRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12]);
 
 					//! amazeballs texture work
 					//scl1 = 0.00001;
@@ -158,8 +161,6 @@ function draw() {
 					//ang1 = 1;
 					//ang2 = 10000000;
 
-					xRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12]);
-					yRandDivider = xRandDivider;
 					let initHue = hue + random(-1, 1);
 					initHue = initHue > 360 ? initHue - 360 : initHue < 0 ? initHue + 360 : initHue;
 					let p = new Particle(x, y, initX, initY, initHue, scl1 / MULTIPLIER, scl2 / MULTIPLIER, ang1 * MULTIPLIER, ang2 * MULTIPLIER, xMin, xMax, yMin, yMax, xRandDivider, yRandDivider, seed);
