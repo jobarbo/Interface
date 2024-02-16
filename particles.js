@@ -26,8 +26,8 @@ class Particle {
 		this.yRandDivider = yRandDivider;
 		this.xRandSkipper = 0;
 		this.yRandSkipper = 0;
-		this.xRandSkipperVal = random([0.1, random(1, 10)]);
-		this.yRandSkipperVal = random([0.1, random(1, 10)]);
+		this.xRandSkipperVal = random([0.1, random(0, 0)]);
+		this.yRandSkipperVal = random([0.1, random(0, 0)]);
 		this.xMin = xMin;
 		this.xMax = xMax;
 		this.yMin = yMin;
@@ -42,7 +42,7 @@ class Particle {
 		this.uvalue = [this.uvalueInit, this.uvalueInit, this.uvalueInit, this.uvalueInit];
 		this.zombie = false;
 		this.zombieAlpha = this.initAlpha;
-		this.lineWeight = 111.001;
+		this.lineWeight = 0.001;
 	}
 
 	update(alpha) {
@@ -91,8 +91,8 @@ class Particle {
 		this.bri += b;
 		/* 		this.sat = s + this.rndSat;
 		this.bri = b + this.rndBri; */
-		this.sat = clamp(this.sat, -this.initSat, 100 + this.initSat);
-		this.bri = clamp(this.bri, -this.initBri, 100 + this.initBri);
+		this.sat = clamp(this.sat, -this.initSat, 100 + this.initSat) + random(-2, 2);
+		this.bri = clamp(this.bri, -this.initBri, 100 + this.initBri) + random(-2, 2);
 		this.hue += mapValue(p.x, -this.uvalue * 2, this.uvalue * 2, -this.hueStep, this.hueStep, true);
 		this.hue = this.hue > 360 ? this.hue - 360 : this.hue < 0 ? this.hue + 360 : this.hue;
 	}

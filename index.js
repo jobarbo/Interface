@@ -34,7 +34,7 @@ let yMax;
 let startTime;
 
 let maxDPI = 3;
-let RATIO = 1.7777;
+let RATIO = 1.4;
 let maxFrames = 60;
 let DEFAULT_SIZE = 3600;
 let W = window.innerWidth;
@@ -77,7 +77,7 @@ function preload() {
 function setup() {
 	DIM = min(windowWidth, windowHeight);
 	MULTIPLIER = DIM / DEFAULT_SIZE;
-	c = createCanvas(DIM * RATIO, DIM);
+	c = createCanvas(DIM, DIM * RATIO);
 	colorMode(HSB, 360, 100, 100, 100);
 	pixelDensity(3);
 
@@ -110,7 +110,7 @@ function setup() {
 	buttons = document.querySelectorAll("[data-button]");
 	handleEvent();
 
-	//drawTexture(h);
+	drawTexture(h);
 }
 
 function draw() {
@@ -158,9 +158,8 @@ function draw() {
 					//ang1 = 1;
 					//ang2 = 10000000;
 
-					xRandDivider = random([0.1]);
-					yRandDivider = random([0.1]);
-
+					xRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12]);
+					yRandDivider = xRandDivider;
 					let initHue = hue + random(-1, 1);
 					initHue = initHue > 360 ? initHue - 360 : initHue < 0 ? initHue + 360 : initHue;
 					let p = new Particle(x, y, initX, initY, initHue, scl1 / MULTIPLIER, scl2 / MULTIPLIER, ang1 * MULTIPLIER, ang2 * MULTIPLIER, xMin, xMax, yMin, yMax, xRandDivider, yRandDivider, seed);

@@ -169,11 +169,11 @@ function checkMIDI() {
 	}
 	if (kname == "34") {
 		//s = int(map(int(kval), 0, 100, 0, 100, true));
-		s = map(int(kval), 0, 100, -0.5, 0.5, true);
+		s = map(int(kval), 0, 100, -2, 2, true);
 	}
 	if (kname == "35") {
 		//b = int(map(int(kval), 0, 100, 0, 100, true));
-		b = map(int(kval), 0, 100, -0.5, 0.5, true);
+		b = map(int(kval), 0, 100, -2, 2, true);
 	}
 	if (kname == "36") {
 		frame = int(map(int(kval), 0, 100, 0, framesMax / 4, true));
