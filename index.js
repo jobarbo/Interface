@@ -7,7 +7,7 @@ let bones = []; // Bones are connections between joints
 let frame = 0; // Keeps the currently displayed frame
 let lastFrame = frame;
 let framesMax; // Maximum number of frames, to loop the animation
-let scaleMotionData = 1; // Scale the figure on screen by a factor, "zoom"
+let scaleMotionData = 2; // Scale the figure on screen by a factor, "zoom"
 
 let num = 1000;
 let w = 1;
@@ -146,15 +146,14 @@ function draw() {
 					let initY = y + random(-p_rand, p_rand);
 					x = initX;
 					y = initY;
-					scl1 = random([0.0008, 0.0009, 0.001, 0.0011, 0.0012]);
-					//scl1 = 0.006;
-					scl2 = scl1;
 
-					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
-					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
+					scl1 = random([0.0008, 0.0009, 0.001, 0.0011]);
+					scl2 = scl1;
 
 					xRandDivider = random([0.1]);
 					yRandDivider = random([0.1]);
+					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
+					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
 
 					let initHue = hue + random(-1, 1);
 					initHue = initHue > 360 ? initHue - 360 : initHue < 0 ? initHue + 360 : initHue;
