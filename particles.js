@@ -28,6 +28,10 @@ class Particle {
 		this.yRandSkipper = 0;
 		this.xRandSkipperVal = random([0.1, random(0, 0)]);
 		this.yRandSkipperVal = random([0.1, random(0, 0)]);
+		/* 		this.xMin = map(xMin, -0.01, 1.01, -width / 2, width / 2);
+		this.xMax = map(xMax, -0.01, 1.01, -width / 2, width / 2);
+		this.yMin = map(yMin, -0.01, 1.01, -height / 2, height / 2);
+		this.yMax = map(yMax, -0.01, 1.01, -height / 2, height / 2); */
 		this.xMin = xMin;
 		this.xMax = xMax;
 		this.yMin = yMin;
@@ -37,7 +41,7 @@ class Particle {
 		this.centerY = height / 2;
 		this.borderX = (xMax * width) / 2;
 		this.borderY = (yMax * height) / 2;
-		this.clampvaluearray = [0.5, 0.25, 0.25, 0.5];
+		this.clampvaluearray = [0.15, 0.25, 0.25, 0.015];
 		this.uvalueInit = random([1, 3, 4, 5, 7, 10, 12, 15, 20, 25]);
 		this.uvalue = [this.uvalueInit, this.uvalueInit, this.uvalueInit, this.uvalueInit];
 		this.zombie = false;

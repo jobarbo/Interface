@@ -7,7 +7,7 @@ let bones = []; // Bones are connections between joints
 let frame = 0; // Keeps the currently displayed frame
 let lastFrame = frame;
 let framesMax; // Maximum number of frames, to loop the animation
-let scaleMotionData = 1.5; // Scale the figure on screen by a factor, "zoom"
+let scaleMotionData = 1; // Scale the figure on screen by a factor, "zoom"
 
 let num = 1000;
 let w = 1;
@@ -16,7 +16,7 @@ let h = 0;
 let s = 0;
 let b = 0;
 let o = 1;
-let p_rand = 0.2;
+let p_rand = 1;
 let size = 0.25;
 let blend_mode = "BLEND";
 
@@ -79,6 +79,7 @@ function setup() {
 	MULTIPLIER = DIM / DEFAULT_SIZE;
 	c = createCanvas(DIM, DIM * RATIO);
 	colorMode(HSB, 360, 100, 100, 100);
+	angleMode(DEGREES);
 	pixelDensity(3);
 
 	framesMax = Object.keys(MCdata).length;
@@ -115,7 +116,9 @@ function setup() {
 
 function draw() {
 	//background(50, 5, 100);
-
+	//translate(width / 2, height / 2);
+	//rotate(random([0, 45, 90, 135, 180, 225, 270, 315]));
+	//rotate[0];
 	// Draw joints
 	/* 	noStroke();
 	drawJoints(frame);
@@ -135,31 +138,23 @@ function draw() {
 		if (particles.length < 10000) {
 			for (let i = 0; i < joints_pos.length; i++) {
 				let {x, y} = joints_pos[i];
-				// let initX = x + random(-1, 1);
-				//let initY = y + random(-1, 1);
-				//x = initX;
-				//y = initY;
-
+				/* 				x = map(x, 0, width, -width / 2, width / 2);
+				y = map(y, 0, height, -height / 2, height / 2); */
 				let hue = h;
 				for (let i = 0; i < num; i++) {
 					let initX = x + random(-p_rand, p_rand);
 					let initY = y + random(-p_rand, p_rand);
 					x = initX;
 					y = initY;
-					scl1 = random([0.00095, 0.001, 0.0011, 0.0012]);
+					scl1 = random([0.0008, 0.0009, 0.001, 0.0011, 0.0012]);
+					//scl1 = 0.006;
 					scl2 = scl1;
 
-					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
-					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
+					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
+					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
 
-					xRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12]);
-					yRandDivider = xRandDivider;
-
-					//! amazeballs texture work
-					//scl1 = 0.00001;
-					//scl2 = 0.00001;
-					//ang1 = 1;
-					//ang2 = 10000000;
+					xRandDivider = random([0.1]);
+					yRandDivider = random([0.1]);
 
 					let initHue = hue + random(-1, 1);
 					initHue = initHue > 360 ? initHue - 360 : initHue < 0 ? initHue + 360 : initHue;
@@ -171,6 +166,7 @@ function draw() {
 
 		lastFrame = frame;
 	}
+
 	if (blend_mode == "ADD") {
 		blendMode(ADD);
 	} else {
