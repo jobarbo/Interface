@@ -1,40 +1,40 @@
 function defineBones() {
 	// head
-	bones.push(['MOUTH_LEFT', 'MOUTH_RIGHT']);
+	bones.push(["MOUTH_LEFT", "MOUTH_RIGHT"]);
 
-	bones.push(['LEFT_EYE_OUTER', 'LEFT_EYE']);
-	bones.push(['LEFT_EYE', 'LEFT_EYE_INNER']);
+	bones.push(["LEFT_EYE_OUTER", "LEFT_EYE"]);
+	bones.push(["LEFT_EYE", "LEFT_EYE_INNER"]);
 
-	bones.push(['RIGHT_EYE_OUTER', 'RIGHT_EYE']);
-	bones.push(['RIGHT_EYE', 'RIGHT_EYE_INNER']);
+	bones.push(["RIGHT_EYE_OUTER", "RIGHT_EYE"]);
+	bones.push(["RIGHT_EYE", "RIGHT_EYE_INNER"]);
 
 	// arms
-	bones.push(['LEFT_SHOULDER', 'RIGHT_SHOULDER']);
+	bones.push(["LEFT_SHOULDER", "RIGHT_SHOULDER"]);
 
-	bones.push(['LEFT_SHOULDER', 'LEFT_ELBOW']);
-	bones.push(['LEFT_ELBOW', 'LEFT_WRIST']);
-	bones.push(['LEFT_WRIST', 'LEFT_THUMB']);
-	bones.push(['LEFT_WRIST', 'LEFT_INDEX']);
-	bones.push(['LEFT_WRIST', 'LEFT_PINKY']);
+	bones.push(["LEFT_SHOULDER", "LEFT_ELBOW"]);
+	bones.push(["LEFT_ELBOW", "LEFT_WRIST"]);
+	bones.push(["LEFT_WRIST", "LEFT_THUMB"]);
+	bones.push(["LEFT_WRIST", "LEFT_INDEX"]);
+	bones.push(["LEFT_WRIST", "LEFT_PINKY"]);
 
-	bones.push(['RIGHT_SHOULDER', 'RIGHT_ELBOW']);
-	bones.push(['RIGHT_ELBOW', 'RIGHT_WRIST']);
-	bones.push(['RIGHT_WRIST', 'RIGHT_THUMB']);
-	bones.push(['RIGHT_WRIST', 'RIGHT_INDEX']);
-	bones.push(['RIGHT_WRIST', 'RIGHT_PINKY']);
+	bones.push(["RIGHT_SHOULDER", "RIGHT_ELBOW"]);
+	bones.push(["RIGHT_ELBOW", "RIGHT_WRIST"]);
+	bones.push(["RIGHT_WRIST", "RIGHT_THUMB"]);
+	bones.push(["RIGHT_WRIST", "RIGHT_INDEX"]);
+	bones.push(["RIGHT_WRIST", "RIGHT_PINKY"]);
 
 	// legs
-	bones.push(['LEFT_HIP', 'RIGHT_HIP']);
+	bones.push(["LEFT_HIP", "RIGHT_HIP"]);
 
-	bones.push(['LEFT_HIP', 'LEFT_KNEE']);
-	bones.push(['LEFT_KNEE', 'LEFT_ANKLE']);
-	bones.push(['LEFT_ANKLE', 'LEFT_HEEL']);
-	bones.push(['LEFT_HEEL', 'LEFT_FOOT_INDEX']);
+	bones.push(["LEFT_HIP", "LEFT_KNEE"]);
+	bones.push(["LEFT_KNEE", "LEFT_ANKLE"]);
+	bones.push(["LEFT_ANKLE", "LEFT_HEEL"]);
+	bones.push(["LEFT_HEEL", "LEFT_FOOT_INDEX"]);
 
-	bones.push(['RIGHT_HIP', 'RIGHT_KNEE']);
-	bones.push(['RIGHT_KNEE', 'RIGHT_ANKLE']);
-	bones.push(['RIGHT_ANKLE', 'RIGHT_HEEL']);
-	bones.push(['RIGHT_HEEL', 'RIGHT_FOOT_INDEX']);
+	bones.push(["RIGHT_HIP", "RIGHT_KNEE"]);
+	bones.push(["RIGHT_KNEE", "RIGHT_ANKLE"]);
+	bones.push(["RIGHT_ANKLE", "RIGHT_HEEL"]);
+	bones.push(["RIGHT_HEEL", "RIGHT_FOOT_INDEX"]);
 }
 
 function drawBones(frame) {
@@ -49,6 +49,10 @@ function drawBones(frame) {
 		if (joint1 && joint2) {
 			j1 = remapPos(joint1.x, joint1.y);
 			j2 = remapPos(joint2.x, joint2.y);
+			j1.x = map(j1.x, 0, width, -width / 2, width / 2);
+			j1.y = map(j1.y, 0, height, -height / 2, height / 2);
+			j2.x = map(j2.x, 0, width, -width / 2, width / 2);
+			j2.y = map(j2.y, 0, height, -height / 2, height / 2);
 		}
 		if (j1 && j2) {
 			stroke(0, 0, 0, 100);
@@ -70,10 +74,15 @@ function drawJoints(frame) {
 		let {x, y, type, name} = joints[i];
 
 		// In this example we use only body joints, not detailed hands joints
-		if (type === 'body') {
+		if (type === "body") {
 			let {x: px, y: py} = previousJoints[i];
 			j = remapPos(x, y);
 			pj = remapPos(px, py);
+
+			j.x = map(j.x, 0, width, -width / 2, width / 2);
+			j.y = map(j.y, 0, height, -height / 2, height / 2);
+			pj.x = map(pj.x, 0, width, -width / 2, width / 2);
+			pj.y = map(pj.y, 0, height, -height / 2, height / 2);
 
 			// convert j and pj to vectors
 			j = createVector(j.x, j.y);
@@ -101,7 +110,7 @@ function get_all_joint_pos(frame) {
 	let j = [];
 	for (let i = 0; i < joints.length; i++) {
 		let {x, y, type, name} = joints[i];
-		if (type === 'body') {
+		if (type === "body") {
 			j.push(remapPos(x, y));
 		}
 	}
@@ -114,7 +123,7 @@ function get_joint_pos(frame, joint_name) {
 	let j;
 	for (let i = 0; i < joints.length; i++) {
 		let {x, y, type, name} = joints[i];
-		if (type === 'body') {
+		if (type === "body") {
 			if (name === joint_name) {
 				j = remapPos(x, y);
 			}
@@ -136,40 +145,40 @@ let timer;
 function checkMIDI() {
 	//if any knob is changed, reset the particles
 
-	if (kname == '32') {
+	if (kname == "32") {
 		size = map(int(kval), 0, 100, 0.01, 1, true);
 		//a = map(int(kval), 0, 100, 0, 100, true);
 	}
-	if (kname == '33') {
+	if (kname == "33") {
 		h = int(map(int(kval), 0, 100, 0, 360, true));
 	}
-	if (kname == '34') {
+	if (kname == "34") {
 		//s = int(map(int(kval), 0, 100, 0, 100, true));
 		s = int(map(int(kval), 0, 100, -5, 5, true));
 	}
-	if (kname == '35') {
+	if (kname == "35") {
 		//b = int(map(int(kval), 0, 100, 0, 100, true));
 		b = int(map(int(kval), 0, 100, -5, 5, true));
 	}
-	if (kname == '36') {
+	if (kname == "36") {
 		frame = int(map(int(kval), 0, 100, 0, framesMax / 4, true));
 	}
-	if (kname == '37') {
+	if (kname == "37") {
 		frame = int(map(int(kval), 0, 100, framesMax / 4, framesMax / 3, true));
 	}
-	if (kname == '38') {
+	if (kname == "38") {
 		frame = int(map(int(kval), 0, 100, framesMax / 3, framesMax / 2, true));
 	}
-	if (kname == '39') {
+	if (kname == "39") {
 		frame = int(map(int(kval), 0, 100, framesMax / 2, framesMax, true));
 	}
-	if (kname == '40' && pressOnce == false) {
+	if (kname == "40" && pressOnce == false) {
 		particles = [];
 		pressOnce = true;
 		return;
 	}
 
-	if (kname == '41' && pressOnce == false) {
+	if (kname == "41" && pressOnce == false) {
 		particles = [];
 		bgmode = 0;
 		background(50, 5, 100);
@@ -178,7 +187,7 @@ function checkMIDI() {
 		pressOnce = true;
 		return;
 	}
-	if (kname == '42' && pressOnce == false) {
+	if (kname == "42" && pressOnce == false) {
 		particles = [];
 		bgmode = 1;
 		background(50, 5, 10);
@@ -188,13 +197,12 @@ function checkMIDI() {
 		return;
 	}
 
-	if(pressOnce == true){
-		kname = '';
+	if (pressOnce == true) {
+		kname = "";
 		// set pressOnce to false after 1000ms
 		timer = setTimeout(() => {
 			pressOnce = false;
-		} , 1000);
-
+		}, 1000);
 	} else {
 		clearTimeout(timer);
 	}
@@ -239,7 +247,7 @@ let dpi = (maxDPI = 3.0) => {
 
 // if cmd + s is pressed, save the canvas'
 function saveCanvas(event) {
-	if (event.key === 's' && (event.metaKey || event.ctrlKey)) {
+	if (event.key === "s" && (event.metaKey || event.ctrlKey)) {
 		saveArtwork();
 		// Prevent the browser from saving the page
 		event.preventDefault();
@@ -248,36 +256,16 @@ function saveCanvas(event) {
 }
 
 // Example usage to add an event listener for key presses
-document.addEventListener('keydown', saveCanvas);
+document.addEventListener("keydown", saveCanvas);
 
 // make a function to save the canvas as a png file with the git branch name and a timestamp
 function saveArtwork() {
-	var dayoftheweek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-	var monthoftheyear = [
-		'january',
-		'february',
-		'march',
-		'april',
-		'may',
-		'june',
-		'july',
-		'august',
-		'september',
-		'october',
-		'november',
-		'december',
-	];
+	var dayoftheweek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+	var monthoftheyear = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
 	var d = new Date();
-	var datestring =
-		d.getDate() +
-		'_' +
-		`${d.getMonth() + 1}` +
-		'_' +
-		d.getFullYear() +
-		'_' +
-		`${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
-	var fileName = datestring + '.png';
+	var datestring = d.getDate() + "_" + `${d.getMonth() + 1}` + "_" + d.getFullYear() + "_" + `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+	var fileName = datestring + ".png";
 
 	save(fileName);
-	console.log('saved ' + fileName);
+	console.log("saved " + fileName);
 }

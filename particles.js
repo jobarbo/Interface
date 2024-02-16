@@ -1,22 +1,5 @@
 class Particle {
-	constructor(
-		x,
-		y,
-		ix,
-		iy,
-		hue,
-		scl1,
-		scl2,
-		ang1,
-		ang2,
-		xMin,
-		xMax,
-		yMin,
-		yMax,
-		xRandDivider,
-		yRandDivider,
-		seed
-	) {
+	constructor(x, y, ix, iy, hue, scl1, scl2, ang1, ang2, xMin, xMax, yMin, yMax, xRandDivider, yRandDivider, seed) {
 		this.x = x;
 		this.y = y;
 		this.ix = ix;
@@ -45,16 +28,16 @@ class Particle {
 		this.yRandSkipper = 0;
 		this.xRandSkipperVal = 0.1;
 		this.yRandSkipperVal = 0.1;
-		this.xMin = xMin;
-		this.xMax = xMax;
-		this.yMin = yMin;
-		this.yMax = yMax;
+		this.xMin = map(xMin, -0.01, 1.01, -width / 2, width / 2);
+		this.xMax = map(xMax, -0.01, 1.01, -width / 2, width / 2);
+		this.yMin = map(yMin, -0.01, 1.01, -height / 2, height / 2);
+		this.yMax = map(yMax, -0.01, 1.01, -height / 2, height / 2);
 		this.oct = 4;
 		this.centerX = width / 2;
 		this.centerY = height / 2;
 		this.borderX = (xMax * width) / 2;
 		this.borderY = (yMax * height) / 2;
-		this.clampvaluearray = [0.15, 0.25, 0.25, 0.015];
+		this.clampvaluearray = [0.5, 0.25, 0.25, 0.5];
 		this.uvalueInit = random([1, 3, 4, 5, 7, 10, 12, 15, 20, 25]);
 		this.uvalue = this.uvalueInit;
 		this.zombie = false;
@@ -69,35 +52,13 @@ class Particle {
 		/*  */
 		/* 		this.uvalue = int(map(particle_dist, 100, 200, this.uvalueInit, this.uvalueInit * 2, true)); */
 
-		let p = superCurve(
-			this.x,
-			this.y,
-			this.scl1,
-			this.scl2,
-			this.ang1,
-			this.ang2,
-			this.seed,
-			this.oct,
-			this.clampvaluearray,
-			this.uvalue
-		);
-		this.xRandSkipper = random(
-			-this.xRandSkipperVal * MULTIPLIER,
-			this.xRandSkipperVal * MULTIPLIER
-		);
-		this.yRandSkipper = random(
-			-this.xRandSkipperVal * MULTIPLIER,
-			this.xRandSkipperVal * MULTIPLIER
-		);
+		let p = superCurve(this.x, this.y, this.scl1, this.scl2, this.ang1, this.ang2, this.seed, this.oct, this.clampvaluearray, this.uvalue);
+		this.xRandSkipper = random(-this.xRandSkipperVal * MULTIPLIER, this.xRandSkipperVal * MULTIPLIER);
+		this.yRandSkipper = random(-this.xRandSkipperVal * MULTIPLIER, this.xRandSkipperVal * MULTIPLIER);
 		this.x += (p.x * MULTIPLIER) / this.xRandDivider + this.xRandSkipper;
 		this.y += (p.y * MULTIPLIER) / this.yRandDivider + this.yRandSkipper;
 
-		if (
-			this.x < this.xMin * width ||
-			this.x > this.xMax * width ||
-			this.y < this.yMin * height ||
-			this.y > this.yMax * height
-		) {
+		if (this.x < this.xMin * width || this.x > this.xMax * width || this.y < this.yMin * height || this.y > this.yMax * height) {
 			this.a = 0;
 			this.zombie = true;
 		} else {
@@ -128,20 +89,8 @@ class Particle {
 		this.bri = b + this.rndBri; */
 		this.sat = clamp(this.sat, -this.initSat, 100 + this.initSat);
 		this.bri = clamp(this.bri, -this.initBri, 100 + this.initBri);
-		this.hue += mapValue(
-			p.x,
-			-this.uvalue * 2,
-			this.uvalue * 2,
-			-this.hueStep,
-			this.hueStep,
-			true
-		);
-		this.hue =
-			this.hue > 360
-				? this.hue - 360
-				: this.hue < 0
-				? this.hue + 360
-				: this.hue;
+		this.hue += mapValue(p.x, -this.uvalue * 2, this.uvalue * 2, -this.hueStep, this.hueStep, true);
+		this.hue = this.hue > 360 ? this.hue - 360 : this.hue < 0 ? this.hue + 360 : this.hue;
 	}
 
 	show() {
@@ -151,18 +100,7 @@ class Particle {
 	}
 }
 
-function superCurve(
-	x,
-	y,
-	scl1,
-	scl2,
-	ang1,
-	ang2,
-	seed,
-	octave,
-	clampvalueArr,
-	uvalue
-) {
+function superCurve(x, y, scl1, scl2, ang1, ang2, seed, octave, clampvalueArr, uvalue) {
 	let nx = x,
 		ny = y,
 		a1 = ang1,

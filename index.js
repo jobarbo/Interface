@@ -72,8 +72,9 @@ function preload() {
 function setup() {
 	DIM = min(windowWidth, windowHeight);
 	MULTIPLIER = DIM / DEFAULT_SIZE;
-	c = createCanvas(windowWidth, windowHeight);
+	c = createCanvas(DIM, DIM);
 	colorMode(HSB, 360, 100, 100, 100);
+	angleMode(DEGREES);
 	//c = createCanvas(windowWidth, windowHeight);
 
 	pixelDensity(3);
@@ -111,6 +112,8 @@ function setup() {
 
 function draw() {
 	//background(50, 5, 100);
+	translate(width / 2, height / 2);
+	rotate(random([0, 45, 90, 135, 180, 225, 270, 315]));
 
 	// Draw joints
 	/* 	noStroke();
@@ -120,8 +123,8 @@ function draw() {
 	noFill();
 	strokeWeight(0.5);
 	stroke(0, 0, 100, 100);
-	drawBones(frame); */
-
+	drawBones(frame);
+ */
 	// Loop the animation
 	checkMIDI();
 
@@ -131,19 +134,14 @@ function draw() {
 		if (particles.length < 10000) {
 			for (let i = 0; i < joints_pos.length; i++) {
 				let {x, y} = joints_pos[i];
-				/* let initX = x + random(-1, 1);
-				let initY = y + random(-1, 1);
-				x = initX;
-				y = initY; */
-
+				x = map(x, 0, width, -width / 2, width / 2);
+				y = map(y, 0, height, -height / 2, height / 2);
 				let hue = h;
 				for (let i = 0; i < num; i++) {
 					let initX = x + random(-1, 1);
 					let initY = y + random(-1, 1);
-					x = initX;
-					y = initY;
+
 					scl1 = random([0.0008, 0.0009, 0.001, 0.0011, 0.0012]);
-					//scl1 = 0.006;
 					scl2 = scl1;
 
 					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560]));
@@ -153,30 +151,8 @@ function draw() {
 					yRandDivider = random([0.1]);
 
 					let initHue = hue + random(-1, 1);
-					initHue =
-						initHue > 360
-							? initHue - 360
-							: initHue < 0
-							? initHue + 360
-							: initHue;
-					let p = new Particle(
-						x,
-						y,
-						initX,
-						initY,
-						initHue,
-						scl1 / MULTIPLIER,
-						scl2 / MULTIPLIER,
-						ang1 * MULTIPLIER,
-						ang2 * MULTIPLIER,
-						xMin,
-						xMax,
-						yMin,
-						yMax,
-						xRandDivider,
-						yRandDivider,
-						seed
-					);
+					initHue = initHue > 360 ? initHue - 360 : initHue < 0 ? initHue + 360 : initHue;
+					let p = new Particle(x, y, initX, initY, initHue, scl1 / MULTIPLIER, scl2 / MULTIPLIER, ang1 * MULTIPLIER, ang2 * MULTIPLIER, xMin, xMax, yMin, yMax, xRandDivider, yRandDivider, seed);
 					particles.push(p);
 				}
 			}
@@ -249,14 +225,10 @@ function drawTexture(hue) {
 
 		let sw = Math.random() * MULTIPLIER;
 		// basic x and y variable and no need to take the width of particles into account
-		const x =
-			centerX - borderX + sw / 2 + Math.random() * (2 * (borderX - sw / 2));
-		const y =
-			centerY - borderY + sw / 2 + Math.random() * (2 * (borderY - sw / 2));
-		const circleX =
-			centerX - borderX + sw + Math.random() * (2 * (borderX - sw));
-		const circleY =
-			centerY - borderY + sw + Math.random() * (2 * (borderY - sw));
+		const x = centerX - borderX + sw / 2 + Math.random() * (2 * (borderX - sw / 2));
+		const y = centerY - borderY + sw / 2 + Math.random() * (2 * (borderY - sw / 2));
+		const circleX = centerX - borderX + sw + Math.random() * (2 * (borderX - sw));
+		const circleY = centerY - borderY + sw + Math.random() * (2 * (borderY - sw));
 		const rectX = x - sw / 2;
 		const rectY = y - sw / 2;
 		let h = hue + Math.random() * 2 - 1;
