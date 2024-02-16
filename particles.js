@@ -37,12 +37,12 @@ class Particle {
 		this.centerY = height / 2;
 		this.borderX = (xMax * width) / 2;
 		this.borderY = (yMax * height) / 2;
-		this.clampvaluearray = [0.15, 0.25, 0.25, 0.015];
+		this.clampvaluearray = [0.5, 0.25, 0.25, 0.5];
 		this.uvalueInit = random([1, 3, 4, 5, 7, 10, 12, 15, 20, 25]);
 		this.uvalue = [this.uvalueInit, this.uvalueInit, this.uvalueInit, this.uvalueInit];
 		this.zombie = false;
 		this.zombieAlpha = this.initAlpha;
-		this.lineWeight = 0.001;
+		this.lineWeight = 1;
 	}
 
 	update(alpha) {

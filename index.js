@@ -34,7 +34,7 @@ let yMax;
 let startTime;
 
 let maxDPI = 3;
-let RATIO = 1.4;
+let RATIO = 1;
 let maxFrames = 60;
 let DEFAULT_SIZE = 3600;
 let W = window.innerWidth;
@@ -146,14 +146,14 @@ function draw() {
 					let initY = y + random(-p_rand, p_rand);
 					x = initX;
 					y = initY;
-					scl1 = random([0.00035, 0.00065, 0.00095, 0.0011, 0.0015]);
+					scl1 = random([0.00095, 0.001, 0.0011, 0.0012]);
 					scl2 = scl1;
 
 					ang1 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
 					ang2 = int(random([1, 5, 10, 20, 40, 80, 160, 320, 640, 1280]));
 
 					xRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12]);
-					yRandDivider = random([0.08, 0.09, 0.1, 0.11, 0.12]);
+					yRandDivider = xRandDivider;
 
 					//! amazeballs texture work
 					//scl1 = 0.00001;
